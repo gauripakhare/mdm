@@ -1,0 +1,1086 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>NUMBER SYSTEM - Basic Theory and Decimal Conversions</title>
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;600;700&family=Inter:wght@400;500;600;700&family=Poppins:wght@500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <!-- Animated Ambient Background with Floating Binary Digits -->
+  <div class="bg-container">
+    <div class="floating-digits" id="floating-digits-bg">
+      <span class="bin-digit" style="left:8%; animation-delay:0s;">1</span>
+      <span class="bin-digit" style="left:22%; animation-delay:2s;">0</span>
+      <span class="bin-digit" style="left:38%; animation-delay:4s;">1</span>
+      <span class="bin-digit" style="left:55%; animation-delay:1s;">1</span>
+      <span class="bin-digit" style="left:72%; animation-delay:3s;">0</span>
+      <span class="bin-digit" style="left:88%; animation-delay:5s;">1</span>
+    </div>
+    <div class="glow-orb orb-1"></div>
+    <div class="glow-orb orb-2"></div>
+  </div>
+
+  <!-- Presentation App Viewport -->
+  <div class="app-viewport">
+
+    <!-- Top Presentation Header Bar -->
+    <header class="presentation-header">
+      <div class="brand-title">
+        <img src="assets/logo.png" alt="SSGMCE Logo" class="header-logo-img">
+        <div class="header-text-group">
+          <span class="college-name-header">SSGMCE, SHEGAON</span>
+          <span class="dept-name-header">Dept. of Computer Science &amp; Engineering</span>
+        </div>
+      </div>
+
+      <div class="header-controls">
+        <button id="btn-fullscreen" class="btn-icon" title="Toggle Fullscreen">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"></path></svg>
+        </button>
+      </div>
+    </header>
+
+    <!-- Main Slide Stage Area -->
+    <main class="slide-stage">
+      <div id="deck" class="slide-deck">
+
+        <!-- ================= SLIDE 1: COVER PAGE WITH REAL ANIMATIONS ================= -->
+        <section class="slide active" data-slide-num="1">
+          <div class="slide-content cover-layout">
+            
+            <div class="cover-college-box glow-pulse-box">
+              <div class="logo-wrapper-pulse">
+                <img src="assets/logo.png" alt="Shri Sant Gajanan Maharaj College of Engineering" class="cover-logo-img">
+                <div class="logo-aura-ring"></div>
+              </div>
+              <div class="cover-institution-text">Shri Sant Gajanan Maharaj College of Engineering, Shegaon</div>
+            </div>
+            
+            <div class="cover-badge mt-2">DEPARTMENT OF COMPUTER SCIENCE &amp; ENGINEERING</div>
+            
+            <h1 class="cover-title shimmer-text-title">NUMBER SYSTEM</h1>
+            <p class="cover-subtitle">Basic Theory &amp; Interactive Decimal Conversions</p>
+
+            <!-- Real Live Converting Ticker Ring -->
+            <div class="live-ticker-bar">
+              <div class="ticker-chip"><span class="ticker-label">DEC:</span> <strong id="ticker-dec">45</strong></div>
+              <div class="ticker-divider">↔</div>
+              <div class="ticker-chip"><span class="ticker-label">BIN:</span> <strong id="ticker-bin">101101₂</strong></div>
+              <div class="ticker-divider">↔</div>
+              <div class="ticker-chip"><span class="ticker-label">OCT:</span> <strong id="ticker-oct">55₈</strong></div>
+              <div class="ticker-divider">↔</div>
+              <div class="ticker-chip"><span class="ticker-label">HEX:</span> <strong id="ticker-hex">2D₁₆</strong></div>
+            </div>
+
+            <div class="action-box mt-3">
+              <button class="btn btn-primary btn-ripple pulse-start-btn" onclick="App.next()">
+                <span>Begin Presentation</span>
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" class="arrow-spin"><polyline points="9 18 15 12 9 6"></polyline></svg>
+              </button>
+            </div>
+
+          </div>
+        </section>
+
+        <!-- ================= SLIDE 2: LEARNING OBJECTIVES ================= -->
+        <section class="slide" data-slide-num="2">
+          <div class="slide-content">
+            <div class="slide-header">
+              <h2>Learning Objectives</h2>
+              <p class="slide-sub">What students will master in this lecture</p>
+            </div>
+            <div class="objectives-grid">
+              <div class="obj-item reveal-step">
+                <div class="obj-check pulse-icon">✓</div>
+                <div>
+                  <h4>Define Number Systems &amp; Radix</h4>
+                  <p>Understand how digits, positional weights, and base values represent numerical quantities in computing.</p>
+                </div>
+              </div>
+              <div class="obj-item reveal-step">
+                <div class="obj-check pulse-icon">✓</div>
+                <div>
+                  <h4>Binary Memory Units &amp; MSB/LSB</h4>
+                  <p>Master Bit, Nibble, Byte, Word, Most Significant Bit (MSB), and Least Significant Bit (LSB) architecture.</p>
+                </div>
+              </div>
+              <div class="obj-item reveal-step">
+                <div class="obj-check pulse-icon">✓</div>
+                <div>
+                  <h4>Understand Computer Hardware Logic</h4>
+                  <p>Learn why digital transistors rely on Binary (ON/OFF) voltage states and byte memory structures.</p>
+                </div>
+              </div>
+              <div class="obj-item reveal-step">
+                <div class="obj-check pulse-icon">✓</div>
+                <div>
+                  <h4>Master Step-by-Step Repeated Division</h4>
+                  <p>Execute division algorithms by 2, 8, and 16 with automatic bottom-to-top remainder reversal.</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- ================= SLIDE 3: WHAT IS NUMBER SYSTEM ================= -->
+        <section class="slide" data-slide-num="3">
+          <div class="slide-content">
+            <div class="slide-header">
+              <h2>What is a Number System?</h2>
+              <p class="slide-sub">The foundation of counting, communication, and digital memory</p>
+            </div>
+            <div class="grid-2">
+              <div class="glass-card flex-card">
+                <h3>Definition &amp; Core Importance</h3>
+                <ul class="reveal-list">
+                  <li class="reveal-step">A <strong>Number System</strong> is a mathematical code used to express quantities using a defined set of symbols (digits).</li>
+                  <li class="reveal-step"><strong>Need:</strong> Standardizes trade, science, data measurement, and computer hardware operations.</li>
+                  <li class="reveal-step"><strong>Key Rule:</strong> The total number of unique symbols is defined by the system's <strong>Base (or Radix)</strong>.</li>
+                </ul>
+              </div>
+              
+              <div class="glass-card flex-card">
+                <h3>Real-Life Interactive Simulations</h3>
+                <div class="examples-vertical">
+                  
+                  <div class="ex-card reveal-step glow-hover">
+                    <div class="ex-icon pulse-animated">💳</div>
+                    <div style="flex:1;">
+                      <strong>ATM PIN (Real Keypad Demo):</strong>
+                      <div class="atm-screen-box mt-2">
+                        <span>PIN: </span><span id="atm-pin-display" class="atm-pin-dots">▪ ▪ ▪ ▪</span>
+                        <div class="atm-btn-row">
+                          <button class="atm-key" onclick="App.pressAtm('1')">1</button>
+                          <button class="atm-key" onclick="App.pressAtm('2')">2</button>
+                          <button class="atm-key" onclick="App.pressAtm('3')">3</button>
+                          <button class="atm-key" onclick="App.pressAtm('4')">4</button>
+                          <button class="atm-key atm-clear" onclick="App.clearAtm()">CLR</button>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="ex-card reveal-step glow-hover">
+                    <div class="ex-icon pulse-animated">💻</div>
+                    <div style="flex:1;">
+                      <strong>Live Computer RAM Bit Stream:</strong>
+                      <div class="ram-stream-box mt-2">
+                        <div class="ram-bit-cell spark-cell">1</div>
+                        <div class="ram-bit-cell spark-cell">0</div>
+                        <div class="ram-bit-cell spark-cell">1</div>
+                        <div class="ram-bit-cell spark-cell">1</div>
+                        <div class="ram-bit-cell spark-cell">0</div>
+                        <div class="ram-bit-cell spark-cell">0</div>
+                        <div class="ram-bit-cell spark-cell">1</div>
+                        <div class="ram-bit-cell spark-cell">0</div>
+                      </div>
+                    </div>
+                  </div>
+
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- ================= SLIDE 4: BASIC CONCEPTS (REAL INTERACTIVE ANIMATIONS) ================= -->
+        <section class="slide" data-slide-num="4">
+          <div class="slide-content">
+            <div class="slide-header">
+              <h2>Basic Concepts</h2>
+              <p class="slide-sub">Interactive demonstrations of Digits, Numbers, Base Radix, and Positional Weighting</p>
+            </div>
+            <div class="grid-4">
+              
+              <!-- 01. DIGIT CARD WITH REAL STEPPER ANIMATION -->
+              <div class="glass-card text-center concept-box reveal-step glow-hover">
+                <div class="concept-badge">01. Single Symbol</div>
+                <h3 class="concept-title">Digit</h3>
+                <div class="concept-visual interactive-stepper-box">
+                  <button class="concept-step-btn" onclick="App.stepDigit(-1)">−</button>
+                  <span id="concept-digit-val" class="pulse-digit-num">7</span>
+                  <button class="concept-step-btn" onclick="App.stepDigit(1)">+</button>
+                </div>
+                <p>Single atomic digit symbol (0 to R−1).</p>
+              </div>
+
+              <!-- 02. NUMBER CARD WITH DIGIT COMBINER ANIMATION -->
+              <div class="glass-card text-center concept-box reveal-step glow-hover">
+                <div class="concept-badge">02. Combined Value</div>
+                <h3 class="concept-title">Number</h3>
+                <div class="concept-visual digit-combine-box" onclick="App.combineNumberAnimation()">
+                  <span class="combine-chip chip-h">4</span>
+                  <span class="combine-chip chip-t">5</span>
+                  <span class="combine-chip chip-o">8</span>
+                  <span class="combine-equals">=</span>
+                  <strong id="combine-result-val">458</strong>
+                </div>
+                <p>Click digits to trigger combination flow!</p>
+              </div>
+
+              <!-- 03. RADIX BASE CARD WITH BASE SWITCHER -->
+              <div class="glass-card text-center concept-box reveal-step glow-hover">
+                <div class="concept-badge">03. Radix (R)</div>
+                <h3 class="concept-title">Base</h3>
+                <div class="radix-btn-grid mb-1">
+                  <button class="radix-pill" onclick="App.setConceptBase(2)">R=2</button>
+                  <button class="radix-pill" onclick="App.setConceptBase(8)">R=8</button>
+                  <button class="radix-pill active-radix" onclick="App.setConceptBase(10)">R=10</button>
+                  <button class="radix-pill" onclick="App.setConceptBase(16)">R=16</button>
+                </div>
+                <div class="concept-visual radix-visual-box" id="concept-radix-visual">
+                  Base 10 {0..9}
+                </div>
+                <p>Total available unique digit symbols.</p>
+              </div>
+
+              <!-- 04. PLACE VALUE CARD WITH POSITIONAL EXPANSION -->
+              <div class="glass-card text-center concept-box reveal-step glow-hover">
+                <div class="concept-badge">04. Position Weight</div>
+                <h3 class="concept-title">Place Value</h3>
+                <div class="concept-visual pv-anim-box">
+                  <div class="pv-pos-label">Digit × R<sup>pos</sup></div>
+                  <div class="pv-calc-dynamic" id="concept-pv-calc">4 × 10<sup>2</sup> = <strong>400</strong></div>
+                </div>
+                <p>Weight assigned to position <code>Pos 2</code>.</p>
+              </div>
+
+            </div>
+          </div>
+        </section>
+
+        <!-- ================= SLIDE 5: TYPES OF NUMBER SYSTEMS ================= -->
+        <section class="slide" data-slide-num="5">
+          <div class="slide-content">
+            <div class="slide-header">
+              <h2>Types of Number Systems</h2>
+              <p class="slide-sub">The four core systems used in modern computer science</p>
+            </div>
+            <div class="grid-4">
+              <div class="glass-card sys-card card-dec reveal-step glow-hover">
+                <div class="sys-base-pill">Base 10</div>
+                <h3 class="sys-title">Decimal</h3>
+                <p class="sys-digits">0, 1, 2, 3, 4, 5, 6, 7, 8, 9</p>
+                <div class="sys-bit-badge">Human Math Standard</div>
+              </div>
+              <div class="glass-card sys-card card-bin reveal-step glow-hover">
+                <div class="sys-base-pill">Base 2</div>
+                <h3 class="sys-title">Binary</h3>
+                <p class="sys-digits">0, 1</p>
+                <div class="sys-bit-badge">1 Bit Logic</div>
+              </div>
+              <div class="glass-card sys-card card-oct reveal-step glow-hover">
+                <div class="sys-base-pill">Base 8</div>
+                <h3 class="sys-title">Octal</h3>
+                <p class="sys-digits">0, 1, 2, 3, 4, 5, 6, 7</p>
+                <div class="sys-bit-badge">3-Bit Grouping</div>
+              </div>
+              <div class="glass-card sys-card card-hex reveal-step glow-hover">
+                <div class="sys-base-pill">Base 16</div>
+                <h3 class="sys-title">Hexadecimal</h3>
+                <p class="sys-digits">0–9 &amp; A, B, C, D, E, F</p>
+                <div class="sys-bit-badge">4-Bit Nibble</div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- ================= SLIDE 6: DECIMAL NUMBER SYSTEM ================= -->
+        <section class="slide" data-slide-num="6">
+          <div class="slide-content">
+            <div class="slide-header">
+              <h2>Decimal Number System (Base 10)</h2>
+              <p class="slide-sub">The universal standard for human mathematics &amp; place value expansion</p>
+            </div>
+            <div class="grid-2">
+              <div class="glass-card flex-card">
+                <h3>Characteristics</h3>
+                <ul class="reveal-list">
+                  <li class="reveal-step"><strong>Base (R = 10):</strong> Uses 10 distinct digits {0, 1, 2, 3, 4, 5, 6, 7, 8, 9}.</li>
+                  <li class="reveal-step"><strong>Positional Weights:</strong> Powers of 10 (10<sup>0</sup> = 1, 10<sup>1</sup> = 10, 10<sup>2</sup> = 100, 10<sup>3</sup> = 1000).</li>
+                  <li class="reveal-step"><strong>Usage:</strong> Everyday counting, accounting, metric measurements, and currency.</li>
+                </ul>
+              </div>
+              <div class="glass-card text-center flex-card">
+                <h3>Place Value Expansion: (458)<sub>10</sub></h3>
+                <div class="pv-container mt-3">
+                  <div class="pv-card reveal-step glow-hover">
+                    <div class="pv-pos">Hundreds (10<sup>2</sup>)</div>
+                    <div class="pv-digit">4</div>
+                    <div class="pv-math">4 × 100 = 400</div>
+                  </div>
+                  <div class="pv-card reveal-step glow-hover">
+                    <div class="pv-pos">Tens (10<sup>1</sup>)</div>
+                    <div class="pv-digit">5</div>
+                    <div class="pv-math">5 × 10 = 50</div>
+                  </div>
+                  <div class="pv-card reveal-step glow-hover">
+                    <div class="pv-pos">Ones (10<sup>0</sup>)</div>
+                    <div class="pv-digit">8</div>
+                    <div class="pv-math">8 × 1 = 8</div>
+                  </div>
+                </div>
+                <div class="pv-total-box reveal-step mt-3">400 + 50 + 8 = <strong>458<sub>10</sub></strong></div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- ================= SLIDE 7: BINARY NUMBER SYSTEM THEORY ================= -->
+        <section class="slide" data-slide-num="7">
+          <div class="slide-content">
+            <div class="slide-header">
+              <h2>Binary Number System (Base 2)</h2>
+              <p class="slide-sub">The language of electronic circuits &amp; transistor switches</p>
+            </div>
+            <div class="grid-2">
+              <div class="glass-card flex-card">
+                <h3>Characteristics &amp; Circuit Logic</h3>
+                <ul class="reveal-list">
+                  <li class="reveal-step"><strong>Base (R = 2):</strong> Uses only 2 digits {0, 1}.</li>
+                  <li class="reveal-step"><strong>Bit:</strong> Binary Digit (smallest unit of computer data).</li>
+                  <li class="reveal-step"><strong>Byte:</strong> Group of 8 Bits (e.g. <code>10110010</code>).</li>
+                  <li class="reveal-step"><strong>Why Computers Use Binary:</strong> Transistors act as electronic switches with only two stable states: <strong>0 (OFF / Low Voltage 0V)</strong> and <strong>1 (ON / High Voltage 5V)</strong>.</li>
+                </ul>
+              </div>
+              <div class="glass-card text-center flex-card">
+                <h3>Real Electric Circuit Transistor Switch</h3>
+                <div class="circuit-wire-box">
+                  <div class="wire-line" id="wire-left"></div>
+                  <div class="lightbulb-glow-container">
+                    <div class="lightbulb-icon" id="s7-bulb">💡</div>
+                    <div class="bulb-beam" id="s7-beam"></div>
+                  </div>
+                  <div class="wire-line" id="wire-right"></div>
+                </div>
+                
+                <div class="switch-demo-wrapper">
+                  <label class="toggle-ui">
+                    <input type="checkbox" id="s7-toggle" onchange="App.toggleSwitch(this.checked)">
+                    <span class="toggle-track"></span>
+                  </label>
+                  <div id="s7-status-text" class="status-label">State: 0 (OFF / 0 Volts)</div>
+                </div>
+                <div class="pv-total-box mt-3">(1011)<sub>2</sub> = (1 × 8) + (0 × 4) + (1 × 2) + (1 × 1) = <strong>11<sub>10</sub></strong></div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- ================= SLIDE 8: BINARY MEMORY UNITS & MSB/LSB ================= -->
+        <section class="slide" data-slide-num="8">
+          <div class="slide-content">
+            <div class="slide-header">
+              <h2>Binary Data Units &amp; MSB vs. LSB Architecture</h2>
+              <p class="slide-sub">Click any Bit (0/1) below to interactively calculate place values in real-time!</p>
+            </div>
+            
+            <div class="grid-4 mb-3">
+              <div class="glass-card text-center unit-card reveal-step glow-hover">
+                <div class="unit-pill">1 Bit</div>
+                <h3>Bit</h3>
+                <div class="unit-visual"><code>[ 1 ]</code></div>
+                <p class="unit-desc">Binary Digit. Smallest unit of data (0 or 1).</p>
+              </div>
+
+              <div class="glass-card text-center unit-card reveal-step glow-hover">
+                <div class="unit-pill">4 Bits</div>
+                <h3>Nibble</h3>
+                <div class="unit-visual"><code>[ 1011 ]</code></div>
+                <p class="unit-desc">Group of 4 Bits (Half a Byte). Equals 1 Hex digit.</p>
+              </div>
+
+              <div class="glass-card text-center unit-card reveal-step glow-hover">
+                <div class="unit-pill">8 Bits</div>
+                <h3>Byte</h3>
+                <div class="unit-visual"><code>[ 10110010 ]</code></div>
+                <p class="unit-desc">Group of 8 Bits. Standard RAM memory address unit.</p>
+              </div>
+
+              <div class="glass-card text-center unit-card reveal-step glow-hover">
+                <div class="unit-pill">16/32/64 Bits</div>
+                <h3>Word</h3>
+                <div class="unit-visual"><code>[ 64-Bit CPU ]</code></div>
+                <p class="unit-desc">Native CPU architecture register processing capacity.</p>
+              </div>
+            </div>
+
+            <div class="glass-card text-center reveal-step">
+              <div class="msb-lsb-header">
+                <h3>Interactive 8-Bit Register: Click Bits to Flip (0 / 1)</h3>
+              </div>
+              <div class="msb-lsb-diagram">
+                <div class="bit-chip-group">
+                  <div class="chip msb-chip interactive-chip" onclick="App.flipBit(7)">
+                    <span class="chip-tag">MSB</span>
+                    <span class="chip-val" id="bit-val-7">1</span>
+                    <span class="chip-weight">2<sup>7</sup>=128</span>
+                  </div>
+                  <div class="chip interactive-chip" onclick="App.flipBit(6)">
+                    <span class="chip-val" id="bit-val-6">0</span>
+                    <span class="chip-weight">2<sup>6</sup>=64</span>
+                  </div>
+                  <div class="chip interactive-chip" onclick="App.flipBit(5)">
+                    <span class="chip-val" id="bit-val-5">1</span>
+                    <span class="chip-weight">2<sup>5</sup>=32</span>
+                  </div>
+                  <div class="chip interactive-chip" onclick="App.flipBit(4)">
+                    <span class="chip-val" id="bit-val-4">1</span>
+                    <span class="chip-weight">2<sup>4</sup>=16</span>
+                  </div>
+                  <div class="chip interactive-chip" onclick="App.flipBit(3)">
+                    <span class="chip-val" id="bit-val-3">0</span>
+                    <span class="chip-weight">2<sup>3</sup>=8</span>
+                  </div>
+                  <div class="chip interactive-chip" onclick="App.flipBit(2)">
+                    <span class="chip-val" id="bit-val-2">0</span>
+                    <span class="chip-weight">2<sup>2</sup>=4</span>
+                  </div>
+                  <div class="chip interactive-chip" onclick="App.flipBit(1)">
+                    <span class="chip-val" id="bit-val-1">1</span>
+                    <span class="chip-weight">2<sup>1</sup>=2</span>
+                  </div>
+                  <div class="chip lsb-chip interactive-chip" onclick="App.flipBit(0)">
+                    <span class="chip-tag">LSB</span>
+                    <span class="chip-val" id="bit-val-0">1</span>
+                    <span class="chip-weight">2<sup>0</sup>=1</span>
+                  </div>
+                </div>
+              </div>
+              <div class="pv-total-box mt-2" id="register-calc-output">
+                Calculated Total: 128 + 0 + 32 + 16 + 0 + 0 + 2 + 1 = <strong>179<sub>10</sub></strong>
+              </div>
+            </div>
+
+          </div>
+        </section>
+
+        <!-- ================= SLIDE 9: OCTAL NUMBER SYSTEM ================= -->
+        <section class="slide" data-slide-num="9">
+          <div class="slide-content">
+            <div class="slide-header">
+              <h2>Octal Number System (Base 8)</h2>
+              <p class="slide-sub">Compact 3-bit binary grouping representation</p>
+            </div>
+            <div class="grid-2">
+              <div class="glass-card flex-card">
+                <h3>Characteristics &amp; 3-Bit Grouping</h3>
+                <ul class="reveal-list">
+                  <li class="reveal-step"><strong>Base (R = 8):</strong> Digits {0, 1, 2, 3, 4, 5, 6, 7}.</li>
+                  <li class="reveal-step">Notice: Digits <code>8</code> and <code>9</code> are strictly invalid in Octal!</li>
+                  <li class="reveal-step"><strong>3-Bit Grouping:</strong> Because 8 = 2<sup>3</sup>, 1 Octal digit represents exactly 3 Binary bits (e.g. 7<sub>8</sub> = 111<sub>2</sub>).</li>
+                  <li class="reveal-step"><strong>Application:</strong> Unix file security permissions (e.g. <code>chmod 755</code>).</li>
+                </ul>
+              </div>
+              <div class="glass-card text-center flex-card">
+                <h3>Place Value Expansion: (156)<sub>8</sub></h3>
+                <div class="pv-container mt-3">
+                  <div class="pv-card reveal-step glow-hover">
+                    <div class="pv-pos">8<sup>2</sup> (64)</div>
+                    <div class="pv-digit">1</div>
+                    <div class="pv-math">1 × 64 = 64</div>
+                  </div>
+                  <div class="pv-card reveal-step glow-hover">
+                    <div class="pv-pos">8<sup>1</sup> (8)</div>
+                    <div class="pv-digit">5</div>
+                    <div class="pv-math">5 × 8 = 40</div>
+                  </div>
+                  <div class="pv-card reveal-step glow-hover">
+                    <div class="pv-pos">8<sup>0</sup> (1)</div>
+                    <div class="pv-digit">6</div>
+                    <div class="pv-math">6 × 1 = 6</div>
+                  </div>
+                </div>
+                <div class="pv-total-box reveal-step mt-3">64 + 40 + 6 = <strong>110<sub>10</sub></strong></div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- ================= SLIDE 10: HEXADECIMAL NUMBER SYSTEM ================= -->
+        <section class="slide" data-slide-num="10">
+          <div class="slide-content">
+            <div class="slide-header">
+              <h2>Hexadecimal Number System (Base 16)</h2>
+              <p class="slide-sub">The 4-bit nibble &amp; memory addressing shorthand</p>
+            </div>
+            <div class="grid-2">
+              <div class="glass-card flex-card">
+                <h3>Characteristics &amp; A–F Mapping</h3>
+                <ul class="reveal-list">
+                  <li class="reveal-step"><strong>Base (R = 16):</strong> Uses 16 symbols: <code>0-9</code> and <code>A, B, C, D, E, F</code>.</li>
+                  <li class="reveal-step"><strong>Letter Values:</strong> A = 10, B = 11, C = 12, D = 13, E = 14, F = 15.</li>
+                  <li class="reveal-step"><strong>4-Bit Grouping:</strong> Because 16 = 2<sup>4</sup>, 1 Hex digit represents 4 Binary bits (1 Nibble).</li>
+                  <li class="reveal-step"><strong>Applications:</strong> HTML RGB colors (e.g. <span class="hex-color-swatch">#87CEFA</span>) and RAM memory addresses.</li>
+                </ul>
+              </div>
+              <div class="glass-card text-center flex-card">
+                <h3>Place Value Expansion: (2F)<sub>16</sub></h3>
+                <div class="pv-container mt-3">
+                  <div class="pv-card reveal-step glow-hover">
+                    <div class="pv-pos">16<sup>1</sup> (16)</div>
+                    <div class="pv-digit">2</div>
+                    <div class="pv-math">2 × 16 = 32</div>
+                  </div>
+                  <div class="pv-card reveal-step glow-hover">
+                    <div class="pv-pos">16<sup>0</sup> (1)</div>
+                    <div class="pv-digit">F (15)</div>
+                    <div class="pv-math">15 × 1 = 15</div>
+                  </div>
+                </div>
+                <div class="pv-total-box reveal-step mt-3">32 + 15 = <strong>47<sub>10</sub></strong></div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- ================= SLIDE 11: COMPARISON TABLE ================= -->
+        <section class="slide" data-slide-num="11">
+          <div class="slide-content">
+            <div class="slide-header">
+              <h2>Master System Comparison Table</h2>
+              <p class="slide-sub">Comparing Decimal, Binary, Octal, and Hexadecimal</p>
+            </div>
+            <div class="glass-card flex-card">
+              <table class="comparison-table">
+                <thead>
+                  <tr>
+                    <th>System Name</th>
+                    <th>Base (Radix)</th>
+                    <th>Valid Digit Symbols</th>
+                    <th>Bit Grouping</th>
+                    <th>Primary Application</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr class="reveal-step row-hover">
+                    <td><strong class="text-primary">Decimal</strong></td>
+                    <td><span class="base-badge badge-dec">10</span></td>
+                    <td><code>0, 1, 2, 3, 4, 5, 6, 7, 8, 9</code></td>
+                    <td>N/A</td>
+                    <td>Human daily math &amp; counting</td>
+                  </tr>
+                  <tr class="reveal-step row-hover">
+                    <td><strong class="text-primary">Binary</strong></td>
+                    <td><span class="base-badge badge-bin">2</span></td>
+                    <td><code>0, 1</code></td>
+                    <td>1 Bit</td>
+                    <td>CPU logic, transistors, memory</td>
+                  </tr>
+                  <tr class="reveal-step row-hover">
+                    <td><strong class="text-primary">Octal</strong></td>
+                    <td><span class="base-badge badge-oct">8</span></td>
+                    <td><code>0, 1, 2, 3, 4, 5, 6, 7</code></td>
+                    <td>3 Bits</td>
+                    <td>Unix file security permissions</td>
+                  </tr>
+                  <tr class="reveal-step row-hover">
+                    <td><strong class="text-primary">Hexadecimal</strong></td>
+                    <td><span class="base-badge badge-hex">16</span></td>
+                    <td><code>0-9</code> and <code>A, B, C, D, E, F</code></td>
+                    <td>4 Bits</td>
+                    <td>RGB colors, memory addresses</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </section>
+
+        <!-- ================= SLIDE 12: DECIMAL TO BINARY ALGORITHM ================= -->
+        <section class="slide" data-slide-num="12">
+          <div class="slide-content">
+            <div class="slide-header">
+              <h2>Decimal to Binary Algorithm (Division by 2)</h2>
+              <p class="slide-sub">The repeated division algorithm &amp; Remainder Order</p>
+            </div>
+            <div class="grid-2">
+              <div class="glass-card">
+                <h3>Algorithm Steps &amp; Bit Mapping</h3>
+                <ol class="reveal-list-num">
+                  <li class="reveal-step">Divide the decimal integer by <strong>2</strong>.</li>
+                  <li class="reveal-step">First remainder obtained = <strong>LSB (Least Significant Bit)</strong>.</li>
+                  <li class="reveal-step">Repeat division until quotient becomes <strong>0</strong>.</li>
+                  <li class="reveal-step">Last remainder obtained = <strong>MSB (Most Significant Bit)</strong>.</li>
+                  <li class="reveal-step">Read remainders from <strong>Bottom (MSB) to Top (LSB)</strong>.</li>
+                </ol>
+              </div>
+              <div class="glass-card text-center flex-center">
+                <div class="svg-flowchart-box">
+                  <div class="flow-node node-1 reveal-step">Start Decimal Integer</div>
+                  <div class="flow-arrow reveal-step">↓</div>
+                  <div class="flow-node node-2 reveal-step">Divide Number by 2</div>
+                  <div class="flow-arrow reveal-step">↓</div>
+                  <div class="flow-node node-3 reveal-step">First Remainder = LSB</div>
+                  <div class="flow-arrow reveal-step">↓</div>
+                  <div class="flow-node node-4 reveal-step">Last Remainder = MSB</div>
+                  <div class="flow-arrow reveal-step">↓</div>
+                  <div class="flow-node node-5 reveal-step highlight-node">Reverse: Read MSB → LSB</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- ================= SLIDE 13: INTERACTIVE DECIMAL TO BINARY (45) ================= -->
+        <section class="slide" data-slide-num="13">
+          <div class="slide-content">
+            <div class="slide-header">
+              <h2>Interactive Classroom Visualizer: Decimal 45 → Binary</h2>
+              <p class="slide-sub">Click NEXT STEP to perform division &amp; map MSB/LSB</p>
+            </div>
+
+            <div class="solver-glass-card">
+              <div class="solver-toolbar">
+                <div class="toolbar-title">Solving (45)<sub>10</sub> → (?)<sub>2</sub></div>
+                <div class="toolbar-btns">
+                  <button id="s12-next-btn" class="btn btn-sm btn-primary" onclick="App.stepBin45()">Next Step</button>
+                  <button id="s12-auto-btn" class="btn btn-sm btn-accent" onclick="App.playBin45()">Auto Play</button>
+                  <button id="s12-reset-btn" class="btn btn-sm btn-secondary" onclick="App.resetBin45()">Reset</button>
+                </div>
+              </div>
+
+              <div class="solver-table-wrap">
+                <table class="solver-table">
+                  <thead>
+                    <tr>
+                      <th>Step</th>
+                      <th>Dividend</th>
+                      <th>Divisor</th>
+                      <th>Quotient</th>
+                      <th>Remainder</th>
+                      <th>Bit Type</th>
+                    </tr>
+                  </thead>
+                  <tbody id="s12-tbody"></tbody>
+                </table>
+              </div>
+
+              <div class="result-highlight-card" id="s12-result-card">
+                <div class="reverse-tag">Read Bottom (MSB) to Top (LSB) ↑</div>
+                <div class="final-answer-text" id="s12-ans-text">Result: (45)₁₀ = ?</div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- ================= SLIDE 14: INTERACTIVE DECIMAL TO BINARY (125) ================= -->
+        <section class="slide" data-slide-num="14">
+          <div class="slide-content">
+            <div class="slide-header">
+              <h2>Interactive Classroom Visualizer: Decimal 125 → Binary</h2>
+              <p class="slide-sub">Step-by-step division by 2 for example 125</p>
+            </div>
+
+            <div class="solver-glass-card">
+              <div class="solver-toolbar">
+                <div class="toolbar-title">Solving (125)<sub>10</sub> → (?)<sub>2</sub></div>
+                <div class="toolbar-btns">
+                  <button id="s13-next-btn" class="btn btn-sm btn-primary" onclick="App.stepBin125()">Next Step</button>
+                  <button id="s13-auto-btn" class="btn btn-sm btn-accent" onclick="App.playBin125()">Auto Play</button>
+                  <button id="s13-reset-btn" class="btn btn-sm btn-secondary" onclick="App.resetBin125()">Reset</button>
+                </div>
+              </div>
+
+              <div class="solver-table-wrap">
+                <table class="solver-table">
+                  <thead>
+                    <tr>
+                      <th>Step</th>
+                      <th>Dividend</th>
+                      <th>Divisor</th>
+                      <th>Quotient</th>
+                      <th>Remainder</th>
+                      <th>Bit Type</th>
+                    </tr>
+                  </thead>
+                  <tbody id="s13-tbody"></tbody>
+                </table>
+              </div>
+
+              <div class="result-highlight-card" id="s13-result-card">
+                <div class="reverse-tag">Read Bottom (MSB) to Top (LSB) ↑</div>
+                <div class="final-answer-text" id="s13-ans-text">Result: (125)₁₀ = ?</div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- ================= SLIDE 15: DECIMAL TO OCTAL ALGORITHM ================= -->
+        <section class="slide" data-slide-num="15">
+          <div class="slide-content">
+            <div class="slide-header">
+              <h2>Decimal to Octal Algorithm (Division by 8)</h2>
+              <p class="slide-sub">Repeated division using Radix 8</p>
+            </div>
+            <div class="grid-2">
+              <div class="glass-card">
+                <h3>Algorithm Steps</h3>
+                <ol class="reveal-list-num">
+                  <li class="reveal-step">Divide decimal number repeatedly by <strong>8</strong>.</li>
+                  <li class="reveal-step">Record remainders (strictly between <strong>0 and 7</strong>).</li>
+                  <li class="reveal-step">Continue division until quotient is <strong>0</strong>.</li>
+                  <li class="reveal-step">Reverse remainders from <strong>Bottom to Top</strong> to form the Octal result.</li>
+                </ol>
+              </div>
+              <div class="glass-card text-center flex-center">
+                <div class="svg-flowchart-box">
+                  <div class="flow-node node-1 reveal-step">Start Decimal Number</div>
+                  <div class="flow-arrow reveal-step">↓</div>
+                  <div class="flow-node node-2 reveal-step">Divide Number by 8</div>
+                  <div class="flow-arrow reveal-step">↓</div>
+                  <div class="flow-node node-3 reveal-step">Record Remainder (0 to 7)</div>
+                  <div class="flow-arrow reveal-step">↓</div>
+                  <div class="flow-node node-4 reveal-step">Reverse Order (Bottom-to-Top)</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- ================= SLIDE 16: INTERACTIVE DECIMAL TO OCTAL (365) ================= -->
+        <section class="slide" data-slide-num="16">
+          <div class="slide-content">
+            <div class="slide-header">
+              <h2>Interactive Classroom Visualizer: Decimal 365 → Octal</h2>
+              <p class="slide-sub">Step-by-step division by 8 for example 365</p>
+            </div>
+
+            <div class="solver-glass-card">
+              <div class="solver-toolbar">
+                <div class="toolbar-title">Solving (365)<sub>10</sub> → (?)<sub>8</sub></div>
+                <div class="toolbar-btns">
+                  <button id="s15-next-btn" class="btn btn-sm btn-primary" onclick="App.stepOct365()">Next Step</button>
+                  <button id="s15-auto-btn" class="btn btn-sm btn-accent" onclick="App.playOct365()">Auto Play</button>
+                  <button id="s15-reset-btn" class="btn btn-sm btn-secondary" onclick="App.resetOct365()">Reset</button>
+                </div>
+              </div>
+
+              <div class="solver-table-wrap">
+                <table class="solver-table">
+                  <thead>
+                    <tr>
+                      <th>Step</th>
+                      <th>Dividend</th>
+                      <th>Divisor</th>
+                      <th>Quotient</th>
+                      <th>Remainder</th>
+                    </tr>
+                  </thead>
+                  <tbody id="s15-tbody"></tbody>
+                </table>
+              </div>
+
+              <div class="result-highlight-card" id="s15-result-card">
+                <div class="reverse-tag">Read Bottom-to-Top ↑</div>
+                <div class="final-answer-text" id="s15-ans-text">Result: (365)₁₀ = ?</div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- ================= SLIDE 17: ANIMATED DECIMAL TO HEX ALGORITHM ================= -->
+        <section class="slide" data-slide-num="17">
+          <div class="slide-content">
+            <div class="slide-header">
+              <h2>Decimal to Hexadecimal Algorithm (Division by 16)</h2>
+              <p class="slide-sub">Repeated division using Radix 16 with glowing letter conversion</p>
+            </div>
+            
+            <div class="grid-2 gap-compact mb-2">
+              <div class="glass-card flex-card card-compact">
+                <h3>Algorithm Steps</h3>
+                <ol class="reveal-list-num compact-list">
+                  <li class="reveal-step">Divide decimal number repeatedly by <strong>16</strong>.</li>
+                  <li class="reveal-step">Record <strong>Quotient</strong> &amp; <strong>Remainder</strong> (0 … 15).</li>
+                  <li class="reveal-step">If remainder is ≥ 10, morph to Hex character:
+                    <br><code>10→A, 11→B, 12→C, 13→D, 14→E, 15→F</code>
+                  </li>
+                  <li class="reveal-step">Repeat division until Quotient becomes <strong>0</strong>.</li>
+                  <li class="reveal-step">Read remainders from <strong>Bottom to Top</strong>.</li>
+                </ol>
+              </div>
+
+              <div class="glass-card text-center flex-card card-compact">
+                <h3>Division Flowchart</h3>
+                <div class="svg-flowchart-box compact-flow">
+                  <div class="flow-node node-1 reveal-step">Start Decimal Number</div>
+                  <div class="flow-arrow reveal-step">↓</div>
+                  <div class="flow-node node-2 reveal-step">Divide Number by 16</div>
+                  <div class="flow-arrow reveal-step">↓</div>
+                  <div class="flow-node node-4 reveal-step highlight-node">Morph Remainder ≥ 10 to Hex (A–F)</div>
+                  <div class="flow-arrow reveal-step">↓</div>
+                  <div class="flow-node node-5 reveal-step">Reverse Order (Bottom-to-Top)</div>
+                </div>
+              </div>
+            </div>
+
+            <div class="glass-card text-center card-compact reveal-step">
+              <div class="morph-grid-title mb-1">
+                <strong>Interactive Remainder to Hex Letter Converter (Click to Morph)</strong>
+              </div>
+              <div class="hex-convert-preview">
+                <div class="convert-pair" onclick="this.classList.toggle('active-morph')"><span>10 → <strong class="morph-letter glow-a">A</strong></span></div>
+                <div class="convert-pair" onclick="this.classList.toggle('active-morph')"><span>11 → <strong class="morph-letter glow-b">B</strong></span></div>
+                <div class="convert-pair" onclick="this.classList.toggle('active-morph')"><span>12 → <strong class="morph-letter glow-c">C</strong></span></div>
+                <div class="convert-pair" onclick="this.classList.toggle('active-morph')"><span>13 → <strong class="morph-letter glow-d">D</strong></span></div>
+                <div class="convert-pair" onclick="this.classList.toggle('active-morph')"><span>14 → <strong class="morph-letter glow-e">E</strong></span></div>
+                <div class="convert-pair" onclick="this.classList.toggle('active-morph')"><span>15 → <strong class="morph-letter glow-f">F</strong></span></div>
+              </div>
+            </div>
+
+          </div>
+        </section>
+
+        <!-- ================= SLIDE 18: INTERACTIVE DECIMAL TO HEX (255) ================= -->
+        <section class="slide" data-slide-num="18">
+          <div class="slide-content">
+            <div class="slide-header">
+              <h2>Interactive Visualizer: Decimal 255 → Hexadecimal</h2>
+              <p class="slide-sub">Animate division by 16 with glowing 15 → <strong>F</strong> conversion</p>
+            </div>
+
+            <div class="solver-glass-card">
+              <div class="solver-toolbar">
+                <div class="toolbar-title">Solving (255)<sub>10</sub> → (?)<sub>16</sub></div>
+                <div class="toolbar-btns">
+                  <button id="s17-next-btn" class="btn btn-sm btn-primary" onclick="App.stepHex255()">Next Step</button>
+                  <button id="s17-auto-btn" class="btn btn-sm btn-accent" onclick="App.playHex255()">Auto Play</button>
+                  <button id="s17-reset-btn" class="btn btn-sm btn-secondary" onclick="App.resetHex255()">Reset</button>
+                </div>
+              </div>
+
+              <div class="solver-table-wrap">
+                <table class="solver-table">
+                  <thead>
+                    <tr>
+                      <th>Step</th>
+                      <th>Dividend</th>
+                      <th>Divisor</th>
+                      <th>Quotient</th>
+                      <th>Remainder (Hex)</th>
+                    </tr>
+                  </thead>
+                  <tbody id="s17-tbody"></tbody>
+                </table>
+              </div>
+
+              <div class="result-highlight-card" id="s17-result-card">
+                <div class="reverse-tag">Read Bottom-to-Top ↑</div>
+                <div class="final-answer-text" id="s17-ans-text">Result: (255)₁₀ = ?</div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- ================= SLIDE 19: PRACTICE QUESTIONS ================= -->
+        <section class="slide" data-slide-num="19">
+          <div class="slide-content">
+            <div class="slide-header">
+              <h2>Classroom Practice Questions</h2>
+              <p class="slide-sub">Click any question card to reveal the answer</p>
+            </div>
+            <div class="grid-3">
+              <div class="glass-card">
+                <h3>Decimal → Binary</h3>
+                <div class="practice-item" onclick="this.classList.toggle('show')">
+                  <span>1) (18)₁₀ = ?</span>
+                  <div class="answer-tag">10010₂</div>
+                </div>
+                <div class="practice-item" onclick="this.classList.toggle('show')">
+                  <span>2) (33)₁₀ = ?</span>
+                  <div class="answer-tag">100001₂</div>
+                </div>
+                <div class="practice-item" onclick="this.classList.toggle('show')">
+                  <span>3) (64)₁₀ = ?</span>
+                  <div class="answer-tag">1000000₂</div>
+                </div>
+                <div class="practice-item" onclick="this.classList.toggle('show')">
+                  <span>4) (99)₁₀ = ?</span>
+                  <div class="answer-tag">1100011₂</div>
+                </div>
+                <div class="practice-item" onclick="this.classList.toggle('show')">
+                  <span>5) (128)₁₀ = ?</span>
+                  <div class="answer-tag">10000000₂</div>
+                </div>
+              </div>
+
+              <div class="glass-card">
+                <h3>Decimal → Octal</h3>
+                <div class="practice-item" onclick="this.classList.toggle('show')">
+                  <span>1) (50)₁₀ = ?</span>
+                  <div class="answer-tag">62₈</div>
+                </div>
+                <div class="practice-item" onclick="this.classList.toggle('show')">
+                  <span>2) (88)₁₀ = ?</span>
+                  <div class="answer-tag">130₈</div>
+                </div>
+                <div class="practice-item" onclick="this.classList.toggle('show')">
+                  <span>3) (150)₁₀ = ?</span>
+                  <div class="answer-tag">226₈</div>
+                </div>
+                <div class="practice-item" onclick="this.classList.toggle('show')">
+                  <span>4) (200)₁₀ = ?</span>
+                  <div class="answer-tag">310₈</div>
+                </div>
+                <div class="practice-item" onclick="this.classList.toggle('show')">
+                  <span>5) (512)₁₀ = ?</span>
+                  <div class="answer-tag">1000₈</div>
+                </div>
+              </div>
+
+              <div class="glass-card">
+                <h3>Decimal → Hexadecimal</h3>
+                <div class="practice-item" onclick="this.classList.toggle('show')">
+                  <span>1) (31)₁₀ = ?</span>
+                  <div class="answer-tag">1F₁₆</div>
+                </div>
+                <div class="practice-item" onclick="this.classList.toggle('show')">
+                  <span>2) (100)₁₀ = ?</span>
+                  <div class="answer-tag">64₁₆</div>
+                </div>
+                <div class="practice-item" onclick="this.classList.toggle('show')">
+                  <span>3) (175)₁₀ = ?</span>
+                  <div class="answer-tag">AF₁₆</div>
+                </div>
+                <div class="practice-item" onclick="this.classList.toggle('show')">
+                  <span>4) (250)₁₀ = ?</span>
+                  <div class="answer-tag">FA₁₆</div>
+                </div>
+                <div class="practice-item" onclick="this.classList.toggle('show')">
+                  <span>5) (4095)₁₀ = ?</span>
+                  <div class="answer-tag">FFF₁₆</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- ================= SLIDE 20: 10-QUESTION INTERACTIVE QUIZ ENGINE ================= -->
+        <section class="slide" data-slide-num="20">
+          <div class="slide-content">
+            <div class="slide-header flex-header-between">
+              <div>
+                <h2>Interactive Classroom Quiz</h2>
+                <p class="slide-sub">Test your knowledge with 10 questions</p>
+              </div>
+              <div class="quiz-status-pill">
+                <span id="quiz-progress-text">Question 1 of 10</span>
+                <span class="quiz-score-badge" id="quiz-score-text">Score: 0 / 10</span>
+              </div>
+            </div>
+
+            <div class="glass-card quiz-card">
+              <h3 id="quiz-question-title" class="quiz-q-title">Question 1: Loading...</h3>
+              <div class="quiz-options" id="quiz-options-container">
+                <!-- Dynamically rendered via JS -->
+              </div>
+              
+              <div class="quiz-explain hidden" id="quiz-explain-box">
+                <!-- Explanation text -->
+              </div>
+
+              <div class="quiz-controls-row mt-3">
+                <button id="quiz-prev-btn" class="btn btn-sm btn-secondary" onclick="App.prevQuizQ()" disabled>← Previous Question</button>
+                <button id="quiz-next-btn" class="btn btn-sm btn-primary" onclick="App.nextQuizQ()">Next Question →</button>
+                <button id="quiz-reset-btn" class="btn btn-sm btn-accent" onclick="App.resetQuiz()">Restart Quiz</button>
+              </div>
+            </div>
+
+          </div>
+        </section>
+
+        <!-- ================= SLIDE 21: PROPER ENHANCED SUMMARY & REVISION CHEATSHEET ================= -->
+        <section class="slide" data-slide-num="21">
+          <div class="slide-content text-center">
+            <div class="slide-header">
+              <h2>Master Lecture Summary &amp; Revision Cheatsheet</h2>
+              <p class="slide-sub">Quick-reference rules for Number Systems, Memory Units, and Conversion Algorithms</p>
+            </div>
+
+            <div class="grid-4 mb-3">
+              
+              <!-- 01. RADIX SYSTEM SUMMARY -->
+              <div class="glass-card text-center summary-card reveal-step glow-hover">
+                <div class="summary-icon">🔢</div>
+                <h3>Base Radix (R)</h3>
+                <ul class="summary-pill-list mt-2">
+                  <li><span class="sum-pill dec-pill">Base 10</span> Digits {0..9}</li>
+                  <li><span class="sum-pill bin-pill">Base 2</span> Digits {0, 1}</li>
+                  <li><span class="sum-pill oct-pill">Base 8</span> Digits {0..7}</li>
+                  <li><span class="sum-pill hex-pill">Base 16</span> Digits {0..F}</li>
+                </ul>
+              </div>
+
+              <!-- 02. MEMORY UNITS HIERARCHY -->
+              <div class="glass-card text-center summary-card reveal-step glow-hover">
+                <div class="summary-icon">💾</div>
+                <h3>Memory Units</h3>
+                <div class="summary-chain mt-2">
+                  <div class="chain-step"><strong>1 Bit</strong> = 0 / 1</div>
+                  <div class="chain-arrow">↓</div>
+                  <div class="chain-step"><strong>1 Nibble</strong> = 4 Bits</div>
+                  <div class="chain-arrow">↓</div>
+                  <div class="chain-step"><strong>1 Byte</strong> = 8 Bits</div>
+                  <div class="chain-arrow">↓</div>
+                  <div class="chain-step"><strong>1 Word</strong> = 16/32/64b</div>
+                </div>
+              </div>
+
+              <!-- 03. MSB VS LSB ARCHITECTURE -->
+              <div class="glass-card text-center summary-card reveal-step glow-hover">
+                <div class="summary-icon">⚙️</div>
+                <h3>MSB vs. LSB</h3>
+                <div class="summary-bit-rules mt-2">
+                  <div class="sum-msb-box">
+                    <span class="badge-red">MSB</span>
+                    <p>Leftmost Bit<br>(Highest Weight 2<sup>7</sup>)</p>
+                  </div>
+                  <div class="sum-lsb-box mt-2">
+                    <span class="badge-green">LSB</span>
+                    <p>Rightmost Bit<br>(Lowest Weight 2<sup>0</sup>)</p>
+                  </div>
+                </div>
+              </div>
+
+              <!-- 04. GOLDEN DIVISION RULE -->
+              <div class="glass-card text-center summary-card reveal-step glow-hover">
+                <div class="summary-icon">🔄</div>
+                <h3>Golden Division Rule</h3>
+                <div class="golden-rule-box mt-2">
+                  <ol class="golden-list">
+                    <li>Divide Decimal Number by Target Base (2, 8, 16).</li>
+                    <li>Record Remainders.</li>
+                    <li>Read Remainders: <strong>Bottom (MSB) to Top (LSB) ↑</strong></li>
+                  </ol>
+                </div>
+              </div>
+
+            </div>
+
+            <div class="action-box flex-center gap-compact mt-2">
+              <button class="btn btn-primary btn-ripple" onclick="App.jump(1)">
+                <span>Restart Presentation ↺</span>
+              </button>
+              <button class="btn btn-accent btn-ripple" onclick="App.jump(20)">
+                <span>Take 10-Question Quiz 📝</span>
+              </button>
+            </div>
+
+          </div>
+        </section>
+
+      </div>
+    </main>
+
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
