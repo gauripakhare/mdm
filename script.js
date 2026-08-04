@@ -1,6 +1,6 @@
 /* ==========================================================================
    NUMBER SYSTEM - Basic Theory and Decimal Conversions
-   Vanilla JavaScript Controller (21-Slide Navigation & Solver Engines)
+   Vanilla JavaScript Controller (20-Slide Navigation & Solver Engines)
    ========================================================================== */
 
 (function () {
@@ -8,14 +8,14 @@
 
   const state = {
     currentSlide: 1,
-    totalSlides: 21,
+    totalSlides: 20,
     isAnimating: false,
     atmPin: '',
     registerBits: [1, 0, 1, 1, 0, 0, 1, 1], // Bit 7 to Bit 0
     quizIndex: 0,
     quizScore: 0,
     quizAnswers: new Array(10).fill(null),
-    tickerNumbers: [45, 125, 255, 179, 365, 88, 512, 100],
+    tickerNumbers: [4095, 97, 45, 125, 255, 179, 365, 512],
     tickerIdx: 0,
     conceptDigit: 7,
     conceptNumbers: [458, 101, 755, 255, 128],
@@ -86,11 +86,10 @@
     }
   ];
 
-  // Division Solvers Engine State
-  const bin45State = { step: 0, steps: [] };
-  const bin125State = { step: 0, steps: [] };
-  const oct365State = { step: 0, steps: [] };
-  const hex255State = { step: 0, steps: [] };
+  // Dynamic Division Solvers Engine State
+  const bin45State = { step: 0, steps: [], num: 45 };
+  const oct365State = { step: 0, steps: [], num: 365 };
+  const hex255State = { step: 0, steps: [], num: 255 };
 
   // Timer reference for auto-play solvers
   let autoPlayTimer = null;
@@ -191,7 +190,6 @@
     const slides = document.querySelectorAll('.slide');
     state.totalSlides = slides.length;
 
-    // Fullscreen Toggle
     const btnFS = document.getElementById('btn-fullscreen');
     if (btnFS) {
       btnFS.addEventListener('click', () => {
@@ -275,21 +273,48 @@
   }
 
   // --------------------------------------------------------------------------
-  // Interactive Division Solvers Data & Logic
+  // CLASSROOM STOPPING RULE DIVISION ALGORITHM ENGINE
+  // Continues division while dividend >= base.
+  // When quotient < base, division STOPS! That final quotient IS the MSB!
+  // Hexadecimal A-F mapping applies ONLY to single-digit values 10..15!
   // --------------------------------------------------------------------------
   function buildDivSteps(num, base) {
     const steps = [];
     let dividend = num;
     let stepCount = 1;
 
-    while (dividend > 0) {
+    // Helper for single hex digit (0-15) mapping
+    const getHexSymbol = (val) => {
+      if (base === 16 && val >= 10 && val <= 15) {
+        return String.fromCharCode(55 + val); // 10->A, 11->B, 12->C, 13->D, 14->E, 15->F
+      }
+      return val.toString();
+    };
+
+    // If initial number is already smaller than base
+    if (dividend < base) {
+      const hexSymbol = getHexSymbol(dividend);
+      steps.push({
+        step: 1,
+        dividend: dividend,
+        divisor: base,
+        quotient: dividend,
+        remainder: dividend,
+        hexCharRem: hexSymbol,
+        hexCharQuot: hexSymbol,
+        isFinalStep: true
+      });
+      return steps;
+    }
+
+    while (dividend >= base) {
       const quotient = Math.floor(dividend / base);
       const remainder = dividend % base;
 
-      let hexChar = remainder;
-      if (base === 16 && remainder >= 10) {
-        hexChar = String.fromCharCode(55 + remainder);
-      }
+      const hexCharRem = getHexSymbol(remainder);
+      // Quotient gets hex symbol A-F ONLY IF it is a single digit 10..15!
+      const hexCharQuot = getHexSymbol(quotient);
+      const isFinalStep = (quotient < base);
 
       steps.push({
         step: stepCount,
@@ -297,7 +322,9 @@
         divisor: base,
         quotient: quotient,
         remainder: remainder,
-        hexChar: hexChar
+        hexCharRem: hexCharRem,
+        hexCharQuot: hexCharQuot,
+        isFinalStep: isFinalStep
       });
 
       dividend = quotient;
@@ -307,77 +334,256 @@
   }
 
   function initSolversData() {
-    bin45State.steps = buildDivSteps(45, 2);
-    bin125State.steps = buildDivSteps(125, 2);
-    oct365State.steps = buildDivSteps(365, 8);
-    hex255State.steps = buildDivSteps(255, 16);
+    bin45State.steps = buildDivSteps(bin45State.num, 2);
+    oct365State.steps = buildDivSteps(oct365State.num, 8);
+    hex255State.steps = buildDivSteps(hex255State.num, 16);
   }
 
-  function stepSolver(stateObj, tbodyId, ansTextId, base, formatAns) {
-    if (stateObj.step >= stateObj.steps.length) return;
-
-    const currentData = stateObj.steps[stateObj.step];
-    const tbody = document.getElementById(tbodyId);
-    if (!tbody) return;
-
-    const row = document.createElement('tr');
-    row.className = 'reveal-step revealed';
-
-    let bitTagHtml = '';
-    if (base === 2) {
-      if (stateObj.step === 0) {
-        bitTagHtml = `<td><span class="lsb-badge-inline">LSB</span></td>`;
-      } else if (stateObj.step === stateObj.steps.length - 1) {
-        bitTagHtml = `<td><span class="msb-badge-inline">MSB</span></td>`;
-      } else {
-        bitTagHtml = `<td>Bit ${stateObj.step}</td>`;
-      }
+  function loadCustomNumber(type) {
+    if (autoPlayTimer) {
+      clearInterval(autoPlayTimer);
+      autoPlayTimer = null;
     }
 
-    let remainderDisplay = currentData.remainder;
-    if (base === 16 && currentData.remainder >= 10) {
-      remainderDisplay = `<span class="morph-letter">${currentData.hexChar}</span> (${currentData.remainder})`;
+    let inputElId = '';
+    let stateObj = null;
+    let targetNumId = '';
+    let tbodyId = '';
+    let ansTextId = '';
+    let prefixId = '';
+    let baseVal = 2;
+
+    if (type === 'bin') {
+      inputElId = 'bin-user-input';
+      stateObj = bin45State;
+      targetNumId = 's12-target-num';
+      tbodyId = 's12-tbody';
+      ansTextId = 's12-ans-text';
+      prefixId = 's12';
+      baseVal = 2;
+    } else if (type === 'oct') {
+      inputElId = 'oct-user-input';
+      stateObj = oct365State;
+      targetNumId = 's15-target-num';
+      tbodyId = 's15-tbody';
+      ansTextId = 's15-ans-text';
+      prefixId = 's15';
+      baseVal = 8;
+    } else if (type === 'hex') {
+      inputElId = 'hex-user-input';
+      stateObj = hex255State;
+      targetNumId = 's17-target-num';
+      tbodyId = 's17-tbody';
+      ansTextId = 's17-ans-text';
+      prefixId = 's17';
+      baseVal = 16;
+    }
+
+    const inputEl = document.getElementById(inputElId);
+    if (!inputEl) return;
+
+    let val = parseInt(inputEl.value, 10);
+    if (isNaN(val) || val <= 0) val = 45;
+    if (val > 99999) val = 99999;
+    inputEl.value = val;
+
+    stateObj.num = val;
+    stateObj.steps = buildDivSteps(val, baseVal);
+    stateObj.step = 0;
+
+    const targetNumEl = document.getElementById(targetNumId);
+    if (targetNumEl) targetNumEl.textContent = val;
+
+    resetSolver(stateObj, tbodyId, ansTextId, `Result: (${val})₁₀ = ?`, prefixId, val, baseVal);
+  }
+
+  function setPreset(type, numVal) {
+    let inputElId = '';
+    if (type === 'bin') inputElId = 'bin-user-input';
+    else if (type === 'oct') inputElId = 'oct-user-input';
+    else if (type === 'hex') inputElId = 'hex-user-input';
+
+    const inputEl = document.getElementById(inputElId);
+    if (inputEl) {
+      inputEl.value = numVal;
+      loadCustomNumber(type);
+    }
+  }
+
+  // --------------------------------------------------------------------------
+  // EXACT CLASSROOM STOPPING RULE SOLVER ENGINE (CLEAN HEXADECIMAL FORMATTING)
+  // --------------------------------------------------------------------------
+  function stepSolver(stateObj, tbodyId, ansTextId, base, formatAns, prefixId) {
+    const container = document.getElementById(tbodyId);
+    if (!container) return;
+
+    // STEP 0: SETUP ROW (Line 1 in Photo: Divisor = Base, Number = N, Remainder = BLANK)
+    if (stateObj.step === 0) {
+      container.innerHTML = '';
+
+      const line1 = document.createElement('div');
+      line1.className = 'tbar-row tbar-row-setup reveal-step revealed active-solver-row';
+      line1.innerHTML = `
+        <div class="tbar-cell cell-divisor">
+          <span class="divisor-pointer-tag">Divisor ➔</span>
+          <span class="num-divisor">${base}</span>
+        </div>
+        <div class="tbar-cell cell-quotient">${stateObj.num}</div>
+        <div class="tbar-cell cell-remainder">
+          <span class="blank-rem-dash">—</span>
+        </div>
+      `;
+      container.appendChild(line1);
+      stateObj.step = 1;
+      return;
+    }
+
+    const currentStepIdx = stateObj.step - 1;
+    if (currentStepIdx >= stateObj.steps.length) return;
+
+    const currentData = stateObj.steps[currentStepIdx];
+    const isFirstDivisionStep = (currentStepIdx === 0);
+    const isFinalDivisionStep = currentData.isFinalStep;
+
+    container.querySelectorAll('.tbar-row').forEach(r => r.classList.remove('active-solver-row'));
+
+    let remDisplay = currentData.remainder;
+    if (base === 16 && currentData.remainder >= 10 && currentData.remainder <= 15) {
+      remDisplay = `<span class="morph-letter">${currentData.hexCharRem}</span> <span class="dec-hint">(${currentData.remainder})</span>`;
+    }
+
+    let quotDisplay = currentData.quotient;
+    if (base === 16 && isFinalDivisionStep && currentData.quotient >= 10 && currentData.quotient <= 15) {
+      quotDisplay = `<span class="morph-letter">${currentData.hexCharQuot}</span> <span class="dec-hint">(${currentData.quotient})</span>`;
+    }
+
+    const row = document.createElement('div');
+    row.className = 'tbar-row reveal-step revealed active-solver-row';
+
+    let remCellHtml = '';
+    let quotCellHtml = `${quotDisplay}`;
+
+    if (isFirstDivisionStep) {
+      // Line 2 in Photo: First division step -> Remainder is encircled green with pointer labeled "LSB"
+      remCellHtml = `
+        <span class="encircled-rem circle-green">${currentData.hexCharRem}</span>
+        <span class="lsb-badge-inline glow-green ml-2">← LSB</span>
+      `;
+      if (base === 16 && currentData.remainder >= 10) {
+        remCellHtml = `
+          <span class="encircled-rem circle-green">${currentData.hexCharRem}</span>
+          <span class="dec-hint ml-1">(${currentData.remainder})</span>
+          <span class="lsb-badge-inline glow-green ml-2">← LSB</span>
+        `;
+      }
+    } else {
+      remCellHtml = `<span>${remDisplay}</span>`;
+    }
+
+    // Last Line in Photo: When quotient < base -> Division STOPS!
+    // The middle quotient is encircled RED with pointer pointing DOWN labeled "MSB"!
+    if (isFinalDivisionStep) {
+      let qEncVal = currentData.hexCharQuot;
+      let qHint = (base === 16 && currentData.quotient >= 10) ? `<span class="dec-hint">(${currentData.quotient})</span>` : '';
+
+      quotCellHtml = `
+        <div class="msb-quotient-wrapper">
+          <div class="msb-quotient-flex">
+            <span class="encircled-rem circle-red">${qEncVal}</span>
+            ${qHint}
+          </div>
+          <span class="msb-badge-inline glow-red msb-pointer-down">↓ MSB</span>
+        </div>
+      `;
     }
 
     row.innerHTML = `
-      <td>${currentData.step}</td>
-      <td>${currentData.dividend}</td>
-      <td>${currentData.divisor}</td>
-      <td>${currentData.quotient}</td>
-      <td><strong>${remainderDisplay}</strong></td>
-      ${bitTagHtml}
+      <div class="tbar-cell cell-divisor">${currentData.divisor}</div>
+      <div class="tbar-cell cell-quotient">${quotCellHtml}</div>
+      <div class="tbar-cell cell-remainder">${remCellHtml}</div>
     `;
 
-    tbody.appendChild(row);
+    container.appendChild(row);
     stateObj.step++;
 
-    if (stateObj.step === stateObj.steps.length) {
+    if (prefixId) {
+      const divNum = document.getElementById(`${prefixId}-div-num`);
+      const divQuot = document.getElementById(`${prefixId}-div-quot`);
+      const divRem = document.getElementById(`${prefixId}-div-rem`);
+      const carryText = document.getElementById(`${prefixId}-carry-text`);
+
+      if (divNum) divNum.textContent = currentData.dividend;
+      if (divQuot) divQuot.textContent = currentData.quotient;
+      if (divRem) {
+        let remText = `Remainder: ${currentData.remainder}`;
+        if (base === 16 && currentData.remainder >= 10) {
+          remText = `Remainder: ${currentData.hexCharRem} (${currentData.remainder})`;
+        }
+        if (isFirstDivisionStep) {
+          remText += ' (LSB)';
+        }
+        divRem.textContent = remText;
+      }
+
+      if (carryText) {
+        if (!isFinalDivisionStep) {
+          carryText.textContent = `↓ Quotient ${currentData.quotient} carries over as new dividend for next step ↓`;
+        } else {
+          carryText.textContent = `✓ Quotient ${currentData.quotient} is less than base ${base}! Division STOPS. Final Quotient = MSB (${currentData.hexCharQuot}) ↑`;
+        }
+      }
+    }
+
+    // When final step is rendered, format final answer reading MSB (final quotient) + remainders in reverse!
+    if (isFinalDivisionStep) {
       const ansText = document.getElementById(ansTextId);
       if (ansText) {
-        const finalVal = stateObj.steps.map(s => s.hexChar).reverse().join('');
-        ansText.innerHTML = formatAns(finalVal);
+        let finalDigits = [];
+        // Final Quotient is MSB
+        finalDigits.push(currentData.hexCharQuot);
+        // Remainders in reverse
+        for (let i = stateObj.steps.length - 1; i >= 0; i--) {
+          finalDigits.push(stateObj.steps[i].hexCharRem);
+        }
+        const finalValStr = finalDigits.join('');
+        ansText.innerHTML = formatAns(finalValStr);
       }
     }
   }
 
-  function resetSolver(stateObj, tbodyId, ansTextId, defaultAnsText) {
+  function resetSolver(stateObj, tbodyId, ansTextId, defaultAnsText, prefixId, initDividend, baseVal) {
     stateObj.step = 0;
-    const tbody = document.getElementById(tbodyId);
-    if (tbody) tbody.innerHTML = '';
+    const container = document.getElementById(tbodyId);
+    if (container) container.innerHTML = '';
     const ansText = document.getElementById(ansTextId);
     if (ansText) ansText.innerHTML = defaultAnsText;
+
+    if (prefixId) {
+      const divNum = document.getElementById(`${prefixId}-div-num`);
+      const divQuot = document.getElementById(`${prefixId}-div-quot`);
+      const divRem = document.getElementById(`${prefixId}-div-rem`);
+      const carryText = document.getElementById(`${prefixId}-carry-text`);
+
+      if (divNum) divNum.textContent = initDividend;
+      if (divQuot) divQuot.textContent = '?';
+      if (divRem) divRem.textContent = 'Remainder: ?';
+      if (carryText) carryText.textContent = `Click Next Division Step to start dividing ${initDividend} by ${baseVal || 2}`;
+    }
+
+    // Auto-initialize Step 0 Setup Row!
+    stepSolver(stateObj, tbodyId, ansTextId, baseVal, val => `Result: (${initDividend})₁₀ = <strong>${val}</strong>`, prefixId);
   }
 
   function playSolver(stateObj, stepFunc) {
     if (autoPlayTimer) clearInterval(autoPlayTimer);
     autoPlayTimer = setInterval(() => {
-      if (stateObj.step < stateObj.steps.length) {
+      if (stateObj.step <= stateObj.steps.length) {
         stepFunc();
       } else {
         clearInterval(autoPlayTimer);
         autoPlayTimer = null;
       }
-    }, 600);
+    }, 800);
   }
 
   // --------------------------------------------------------------------------
@@ -569,6 +775,10 @@
     prev: handlePrev,
     jump: (num) => goToSlide(parseInt(num, 10)),
 
+    // Custom Number Input API
+    loadCustomNumber: loadCustomNumber,
+    setPreset: setPreset,
+
     // Slide 4 Basic Concepts API
     stepDigit: stepDigit,
     combineNumberAnimation: combineNumberAnimation,
@@ -611,22 +821,18 @@
     prevQuizQ: prevQuizQ,
     resetQuiz: resetQuiz,
 
-    // Solvers API
-    stepBin45: () => stepSolver(bin45State, 's12-tbody', 's12-ans-text', 2, val => `Result: (45)₁₀ = <strong>${val}₂</strong>`),
+    // Dynamic Solvers API (Decimal -> Binary, Octal, Hexadecimal)
+    stepBin45: () => stepSolver(bin45State, 's12-tbody', 's12-ans-text', 2, val => `Result: (${bin45State.num})₁₀ = <strong>${val}₂</strong>`, 's12'),
     playBin45: () => playSolver(bin45State, window.App.stepBin45),
-    resetBin45: () => resetSolver(bin45State, 's12-tbody', 's12-ans-text', 'Result: (45)₁₀ = ?'),
+    resetBin45: () => resetSolver(bin45State, 's12-tbody', 's12-ans-text', `Result: (${bin45State.num})₁₀ = ?`, 's12', bin45State.num, 2),
 
-    stepBin125: () => stepSolver(bin125State, 's13-tbody', 's13-ans-text', 2, val => `Result: (125)₁₀ = <strong>${val}₂</strong>`),
-    playBin125: () => playSolver(bin125State, window.App.stepBin125),
-    resetBin125: () => resetSolver(bin125State, 's13-tbody', 's13-ans-text', 'Result: (125)₁₀ = ?'),
-
-    stepOct365: () => stepSolver(oct365State, 's15-tbody', 's15-ans-text', 8, val => `Result: (365)₁₀ = <strong>${val}₈</strong>`),
+    stepOct365: () => stepSolver(oct365State, 's15-tbody', 's15-ans-text', 8, val => `Result: (${oct365State.num})₁₀ = <strong>${val}₈</strong>`, 's15'),
     playOct365: () => playSolver(oct365State, window.App.stepOct365),
-    resetOct365: () => resetSolver(oct365State, 's15-tbody', 's15-ans-text', 'Result: (365)₁₀ = ?'),
+    resetOct365: () => resetSolver(oct365State, 's15-tbody', 's15-ans-text', `Result: (${oct365State.num})₁₀ = ?`, 's15', oct365State.num, 8),
 
-    stepHex255: () => stepSolver(hex255State, 's17-tbody', 's17-ans-text', 16, val => `Result: (255)₁₀ = <strong>${val}₁₆</strong>`),
+    stepHex255: () => stepSolver(hex255State, 's17-tbody', 's17-ans-text', 16, val => `Result: (${hex255State.num})₁₀ = <strong>${val}₁₆</strong>`, 's17'),
     playHex255: () => playSolver(hex255State, window.App.stepHex255),
-    resetHex255: () => resetSolver(hex255State, 's17-tbody', 's17-ans-text', 'Result: (255)₁₀ = ?')
+    resetHex255: () => resetSolver(hex255State, 's17-tbody', 's17-ans-text', `Result: (${hex255State.num})₁₀ = ?`, 's17', hex255State.num, 16)
   };
 
   // Initialize on DOM Ready

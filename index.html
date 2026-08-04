@@ -606,9 +606,9 @@
                 <ol class="reveal-list-num">
                   <li class="reveal-step">Divide the decimal integer by <strong>2</strong>.</li>
                   <li class="reveal-step">First remainder obtained = <strong>LSB (Least Significant Bit)</strong>.</li>
-                  <li class="reveal-step">Repeat division until quotient becomes <strong>0</strong>.</li>
-                  <li class="reveal-step">Last remainder obtained = <strong>MSB (Most Significant Bit)</strong>.</li>
-                  <li class="reveal-step">Read remainders from <strong>Bottom (MSB) to Top (LSB)</strong>.</li>
+                  <li class="reveal-step">Repeat division until quotient is less than base 2 (<strong>Quotient &lt; 2</strong>).</li>
+                  <li class="reveal-step">Final quotient obtained = <strong>MSB (Most Significant Bit)</strong>.</li>
+                  <li class="reveal-step">Read answer starting from <strong>MSB (Final Quotient) down through remainders to LSB</strong>.</li>
                 </ol>
               </div>
               <div class="glass-card text-center flex-center">
@@ -628,92 +628,90 @@
           </div>
         </section>
 
-        <!-- ================= SLIDE 13: INTERACTIVE DECIMAL TO BINARY (45) ================= -->
+        <!-- ================= SLIDE 13: CLASSROOM NOTEBOOK T-BAR DIVISION LADDER (BINARY) ================= -->
         <section class="slide" data-slide-num="13">
           <div class="slide-content">
             <div class="slide-header">
-              <h2>Interactive Classroom Visualizer: Decimal 45 → Binary</h2>
-              <p class="slide-sub">Click NEXT STEP to perform division &amp; map MSB/LSB</p>
+              <h2>Universal Live Visualizer: Decimal → Binary Converter</h2>
+              <p class="slide-sub">Type ANY decimal number to dynamically generate the handwritten notebook division ladder!</p>
             </div>
 
-            <div class="solver-glass-card">
-              <div class="solver-toolbar">
-                <div class="toolbar-title">Solving (45)<sub>10</sub> → (?)<sub>2</sub></div>
-                <div class="toolbar-btns">
-                  <button id="s12-next-btn" class="btn btn-sm btn-primary" onclick="App.stepBin45()">Next Step</button>
-                  <button id="s12-auto-btn" class="btn btn-sm btn-accent" onclick="App.playBin45()">Auto Play</button>
-                  <button id="s12-reset-btn" class="btn btn-sm btn-secondary" onclick="App.resetBin45()">Reset</button>
+            <!-- ELEGANT 2-COLUMN SPLIT-PANEL CONVERTER WORKSPACE WITH T-BAR LADDER -->
+            <div class="converter-split-workspace">
+              
+              <!-- LEFT PANEL: INPUT CONTROLS & MOTION STAGE -->
+              <div class="glass-card panel-left-controls">
+                <div class="panel-header-badge">Control &amp; Input Hub</div>
+                <h3 class="panel-title" id="s12-toolbar-title">Solving (<span id="s12-target-num">45</span>)<sub>10</sub> → (?)<sub>2</sub></h3>
+
+                <!-- CUSTOM INPUT BOX -->
+                <div class="custom-input-card mt-2">
+                  <label for="bin-user-input" class="input-field-label">Enter Decimal Number:</label>
+                  <div class="input-with-btn">
+                    <input type="number" id="bin-user-input" value="45" min="1" max="99999" class="custom-num-input">
+                    <button class="btn btn-sm btn-primary" onclick="App.loadCustomNumber('bin')">Load &amp; Convert ⚡</button>
+                  </div>
                 </div>
+
+                <!-- QUICK PRESETS -->
+                <div class="preset-chips-group mt-2">
+                  <span class="preset-label">Quick Presets:</span>
+                  <button class="preset-btn" onclick="App.setPreset('bin', 45)">45</button>
+                  <button class="preset-btn" onclick="App.setPreset('bin', 97)">97</button>
+                  <button class="preset-btn" onclick="App.setPreset('bin', 125)">125</button>
+                  <button class="preset-btn" onclick="App.setPreset('bin', 255)">255</button>
+                </div>
+
+                <!-- CONTROLS -->
+                <div class="action-btn-row mt-2">
+                  <button id="s12-next-btn" class="btn btn-sm btn-primary" onclick="App.stepBin45()">Next Step →</button>
+                  <button id="s12-auto-btn" class="btn btn-sm btn-accent" onclick="App.playBin45()">Auto Play ▶</button>
+                  <button id="s12-reset-btn" class="btn btn-sm btn-secondary" onclick="App.resetBin45()">Reset ↺</button>
+                </div>
+
+                <!-- LIVE MATH MOTION STAGE -->
+                <div class="live-math-stage mt-2" id="s12-math-stage">
+                  <div class="math-eq-display">
+                    <span class="math-active-label">Active Step:</span>
+                    <span class="math-operand" id="s12-div-num">45</span> ÷ <span class="math-base">2</span> = 
+                    <span class="math-quotient" id="s12-div-quot">22</span> 
+                    <span class="math-remainder-pill" id="s12-div-rem">Remainder: 1 (LSB)</span>
+                  </div>
+                  <div class="quotient-carry-arrow" id="s12-carry-text">↓ Quotient 22 carries over as new dividend for next step ↓</div>
+                </div>
+
               </div>
 
-              <div class="solver-table-wrap">
-                <table class="solver-table">
-                  <thead>
-                    <tr>
-                      <th>Step</th>
-                      <th>Dividend</th>
-                      <th>Divisor</th>
-                      <th>Quotient</th>
-                      <th>Remainder</th>
-                      <th>Bit Type</th>
-                    </tr>
-                  </thead>
-                  <tbody id="s12-tbody"></tbody>
-                </table>
+              <!-- RIGHT PANEL: CLASSROOM NOTEBOOK T-BAR LADDER OUTPUT -->
+              <div class="glass-card panel-right-output">
+                <div class="panel-header-badge">Notebook T-Bar Division Ladder Method</div>
+                
+                <div class="notebook-tbar-container mt-2">
+                  <!-- T-BAR LADDER HEADER -->
+                  <div class="tbar-header-row">
+                    <div class="tbar-col-head col-divisor">Divisor</div>
+                    <div class="tbar-col-head col-quotient">Number / Quotient</div>
+                    <div class="tbar-col-head col-remainder">Remainder</div>
+                  </div>
+
+                  <!-- T-BAR LADDER BODY ROWS -->
+                  <div class="tbar-ladder-body" id="s12-tbody"></div>
+                </div>
+
+                <div class="result-highlight-card mt-2" id="s12-result-card">
+                  <div class="reverse-tag">Read Remainders Bottom (MSB) to Top (LSB) ↑</div>
+                  <div class="final-answer-text" id="s12-ans-text">Result: (45)₁₀ = ?</div>
+                </div>
+
               </div>
 
-              <div class="result-highlight-card" id="s12-result-card">
-                <div class="reverse-tag">Read Bottom (MSB) to Top (LSB) ↑</div>
-                <div class="final-answer-text" id="s12-ans-text">Result: (45)₁₀ = ?</div>
-              </div>
             </div>
+
           </div>
         </section>
 
-        <!-- ================= SLIDE 14: INTERACTIVE DECIMAL TO BINARY (125) ================= -->
+        <!-- ================= SLIDE 14: DECIMAL TO OCTAL ALGORITHM ================= -->
         <section class="slide" data-slide-num="14">
-          <div class="slide-content">
-            <div class="slide-header">
-              <h2>Interactive Classroom Visualizer: Decimal 125 → Binary</h2>
-              <p class="slide-sub">Step-by-step division by 2 for example 125</p>
-            </div>
-
-            <div class="solver-glass-card">
-              <div class="solver-toolbar">
-                <div class="toolbar-title">Solving (125)<sub>10</sub> → (?)<sub>2</sub></div>
-                <div class="toolbar-btns">
-                  <button id="s13-next-btn" class="btn btn-sm btn-primary" onclick="App.stepBin125()">Next Step</button>
-                  <button id="s13-auto-btn" class="btn btn-sm btn-accent" onclick="App.playBin125()">Auto Play</button>
-                  <button id="s13-reset-btn" class="btn btn-sm btn-secondary" onclick="App.resetBin125()">Reset</button>
-                </div>
-              </div>
-
-              <div class="solver-table-wrap">
-                <table class="solver-table">
-                  <thead>
-                    <tr>
-                      <th>Step</th>
-                      <th>Dividend</th>
-                      <th>Divisor</th>
-                      <th>Quotient</th>
-                      <th>Remainder</th>
-                      <th>Bit Type</th>
-                    </tr>
-                  </thead>
-                  <tbody id="s13-tbody"></tbody>
-                </table>
-              </div>
-
-              <div class="result-highlight-card" id="s13-result-card">
-                <div class="reverse-tag">Read Bottom (MSB) to Top (LSB) ↑</div>
-                <div class="final-answer-text" id="s13-ans-text">Result: (125)₁₀ = ?</div>
-              </div>
-            </div>
-          </div>
-        </section>
-
-        <!-- ================= SLIDE 15: DECIMAL TO OCTAL ALGORITHM ================= -->
-        <section class="slide" data-slide-num="15">
           <div class="slide-content">
             <div class="slide-header">
               <h2>Decimal to Octal Algorithm (Division by 8)</h2>
@@ -724,9 +722,10 @@
                 <h3>Algorithm Steps</h3>
                 <ol class="reveal-list-num">
                   <li class="reveal-step">Divide decimal number repeatedly by <strong>8</strong>.</li>
+                  <li class="reveal-step">First remainder obtained = <strong>LSB (Position 0)</strong>.</li>
                   <li class="reveal-step">Record remainders (strictly between <strong>0 and 7</strong>).</li>
-                  <li class="reveal-step">Continue division until quotient is <strong>0</strong>.</li>
-                  <li class="reveal-step">Reverse remainders from <strong>Bottom to Top</strong> to form the Octal result.</li>
+                  <li class="reveal-step">Continue division until quotient is less than base 8 (<strong>Quotient &lt; 8</strong>).</li>
+                  <li class="reveal-step">Final quotient = <strong>MSB</strong>. Read answer from <strong>MSB (Bottom) to LSB (Top)</strong>.</li>
                 </ol>
               </div>
               <div class="glass-card text-center flex-center">
@@ -744,49 +743,90 @@
           </div>
         </section>
 
-        <!-- ================= SLIDE 16: INTERACTIVE DECIMAL TO OCTAL (365) ================= -->
-        <section class="slide" data-slide-num="16">
+        <!-- ================= SLIDE 15: CLASSROOM NOTEBOOK T-BAR DIVISION LADDER (OCTAL) ================= -->
+        <section class="slide" data-slide-num="15">
           <div class="slide-content">
             <div class="slide-header">
-              <h2>Interactive Classroom Visualizer: Decimal 365 → Octal</h2>
-              <p class="slide-sub">Step-by-step division by 8 for example 365</p>
+              <h2>Universal Live Visualizer: Decimal → Octal Converter</h2>
+              <p class="slide-sub">Type ANY decimal number to dynamically generate the handwritten notebook division ladder!</p>
             </div>
 
-            <div class="solver-glass-card">
-              <div class="solver-toolbar">
-                <div class="toolbar-title">Solving (365)<sub>10</sub> → (?)<sub>8</sub></div>
-                <div class="toolbar-btns">
-                  <button id="s15-next-btn" class="btn btn-sm btn-primary" onclick="App.stepOct365()">Next Step</button>
-                  <button id="s15-auto-btn" class="btn btn-sm btn-accent" onclick="App.playOct365()">Auto Play</button>
-                  <button id="s15-reset-btn" class="btn btn-sm btn-secondary" onclick="App.resetOct365()">Reset</button>
+            <!-- ELEGANT 2-COLUMN SPLIT-PANEL CONVERTER WORKSPACE WITH T-BAR LADDER -->
+            <div class="converter-split-workspace">
+              
+              <!-- LEFT PANEL: INPUT CONTROLS & MOTION STAGE -->
+              <div class="glass-card panel-left-controls">
+                <div class="panel-header-badge">Control &amp; Input Hub</div>
+                <h3 class="panel-title" id="s15-toolbar-title">Solving (<span id="s15-target-num">365</span>)<sub>10</sub> → (?)<sub>8</sub></h3>
+
+                <!-- CUSTOM INPUT BOX -->
+                <div class="custom-input-card mt-2">
+                  <label for="oct-user-input" class="input-field-label">Enter Decimal Number:</label>
+                  <div class="input-with-btn">
+                    <input type="number" id="oct-user-input" value="365" min="1" max="99999" class="custom-num-input">
+                    <button class="btn btn-sm btn-primary" onclick="App.loadCustomNumber('oct')">Load &amp; Convert ⚡</button>
+                  </div>
                 </div>
+
+                <!-- QUICK PRESETS -->
+                <div class="preset-chips-group mt-2">
+                  <span class="preset-label">Quick Presets:</span>
+                  <button class="preset-btn" onclick="App.setPreset('oct', 365)">365</button>
+                  <button class="preset-btn" onclick="App.setPreset('oct', 88)">88</button>
+                  <button class="preset-btn" onclick="App.setPreset('oct', 512)">512</button>
+                  <button class="preset-btn" onclick="App.setPreset('oct', 1000)">1000</button>
+                </div>
+
+                <!-- CONTROLS -->
+                <div class="action-btn-row mt-2">
+                  <button id="s15-next-btn" class="btn btn-sm btn-primary" onclick="App.stepOct365()">Next Step →</button>
+                  <button id="s15-auto-btn" class="btn btn-sm btn-accent" onclick="App.playOct365()">Auto Play ▶</button>
+                  <button id="s15-reset-btn" class="btn btn-sm btn-secondary" onclick="App.resetOct365()">Reset ↺</button>
+                </div>
+
+                <!-- LIVE MATH MOTION STAGE -->
+                <div class="live-math-stage mt-2" id="s15-math-stage">
+                  <div class="math-eq-display">
+                    <span class="math-active-label">Active Step:</span>
+                    <span class="math-operand" id="s15-div-num">365</span> ÷ <span class="math-base">8</span> = 
+                    <span class="math-quotient" id="s15-div-quot">45</span> 
+                    <span class="math-remainder-pill" id="s15-div-rem">Remainder: 5</span>
+                  </div>
+                  <div class="quotient-carry-arrow" id="s15-carry-text">↓ Quotient 45 carries over as new dividend for next step ↓</div>
+                </div>
+
               </div>
 
-              <div class="solver-table-wrap">
-                <table class="solver-table">
-                  <thead>
-                    <tr>
-                      <th>Step</th>
-                      <th>Dividend</th>
-                      <th>Divisor</th>
-                      <th>Quotient</th>
-                      <th>Remainder</th>
-                    </tr>
-                  </thead>
-                  <tbody id="s15-tbody"></tbody>
-                </table>
+              <!-- RIGHT PANEL: CLASSROOM NOTEBOOK T-BAR LADDER OUTPUT -->
+              <div class="glass-card panel-right-output">
+                <div class="panel-header-badge">Notebook T-Bar Division Ladder Method</div>
+                
+                <div class="notebook-tbar-container mt-2">
+                  <!-- T-BAR LADDER HEADER -->
+                  <div class="tbar-header-row">
+                    <div class="tbar-col-head col-divisor">Divisor</div>
+                    <div class="tbar-col-head col-quotient">Number / Quotient</div>
+                    <div class="tbar-col-head col-remainder">Remainder</div>
+                  </div>
+
+                  <!-- T-BAR LADDER BODY ROWS -->
+                  <div class="tbar-ladder-body" id="s15-tbody"></div>
+                </div>
+
+                <div class="result-highlight-card mt-2" id="s15-result-card">
+                  <div class="reverse-tag">Read Remainders Bottom (MSD) to Top (LSD) ↑</div>
+                  <div class="final-answer-text" id="s15-ans-text">Result: (365)₁₀ = ?</div>
+                </div>
+
               </div>
 
-              <div class="result-highlight-card" id="s15-result-card">
-                <div class="reverse-tag">Read Bottom-to-Top ↑</div>
-                <div class="final-answer-text" id="s15-ans-text">Result: (365)₁₀ = ?</div>
-              </div>
             </div>
+
           </div>
         </section>
 
-        <!-- ================= SLIDE 17: ANIMATED DECIMAL TO HEX ALGORITHM ================= -->
-        <section class="slide" data-slide-num="17">
+        <!-- ================= SLIDE 16: DECIMAL TO HEX ALGORITHM ================= -->
+        <section class="slide" data-slide-num="16">
           <div class="slide-content">
             <div class="slide-header">
               <h2>Decimal to Hexadecimal Algorithm (Division by 16)</h2>
@@ -799,11 +839,11 @@
                 <ol class="reveal-list-num compact-list">
                   <li class="reveal-step">Divide decimal number repeatedly by <strong>16</strong>.</li>
                   <li class="reveal-step">Record <strong>Quotient</strong> &amp; <strong>Remainder</strong> (0 … 15).</li>
-                  <li class="reveal-step">If remainder is ≥ 10, morph to Hex character:
+                  <li class="reveal-step">If remainder is ≥ 10, convert to Hex character:
                     <br><code>10→A, 11→B, 12→C, 13→D, 14→E, 15→F</code>
                   </li>
-                  <li class="reveal-step">Repeat division until Quotient becomes <strong>0</strong>.</li>
-                  <li class="reveal-step">Read remainders from <strong>Bottom to Top</strong>.</li>
+                  <li class="reveal-step">Repeat division until Quotient is less than base 16 (<strong>Quotient &lt; 16</strong>).</li>
+                  <li class="reveal-step">Final quotient = <strong>MSB</strong>. Read answer from <strong>MSB (Bottom) to LSB (Top)</strong>.</li>
                 </ol>
               </div>
 
@@ -814,7 +854,7 @@
                   <div class="flow-arrow reveal-step">↓</div>
                   <div class="flow-node node-2 reveal-step">Divide Number by 16</div>
                   <div class="flow-arrow reveal-step">↓</div>
-                  <div class="flow-node node-4 reveal-step highlight-node">Morph Remainder ≥ 10 to Hex (A–F)</div>
+                  <div class="flow-node node-4 reveal-step highlight-node">Convert Remainder ≥ 10 to Hex (A–F)</div>
                   <div class="flow-arrow reveal-step">↓</div>
                   <div class="flow-node node-5 reveal-step">Reverse Order (Bottom-to-Top)</div>
                 </div>
@@ -822,65 +862,106 @@
             </div>
 
             <div class="glass-card text-center card-compact reveal-step">
-              <div class="morph-grid-title mb-1">
-                <strong>Interactive Remainder to Hex Letter Converter (Click to Morph)</strong>
+              <div class="convert-grid-title mb-1">
+                <strong>Interactive Remainder to Hex Letter Converter (Click to Convert)</strong>
               </div>
               <div class="hex-convert-preview">
-                <div class="convert-pair" onclick="this.classList.toggle('active-morph')"><span>10 → <strong class="morph-letter glow-a">A</strong></span></div>
-                <div class="convert-pair" onclick="this.classList.toggle('active-morph')"><span>11 → <strong class="morph-letter glow-b">B</strong></span></div>
-                <div class="convert-pair" onclick="this.classList.toggle('active-morph')"><span>12 → <strong class="morph-letter glow-c">C</strong></span></div>
-                <div class="convert-pair" onclick="this.classList.toggle('active-morph')"><span>13 → <strong class="morph-letter glow-d">D</strong></span></div>
-                <div class="convert-pair" onclick="this.classList.toggle('active-morph')"><span>14 → <strong class="morph-letter glow-e">E</strong></span></div>
-                <div class="convert-pair" onclick="this.classList.toggle('active-morph')"><span>15 → <strong class="morph-letter glow-f">F</strong></span></div>
+                <div class="convert-pair" onclick="this.classList.toggle('active-convert')"><span>10 → <strong class="convert-letter glow-a">A</strong></span></div>
+                <div class="convert-pair" onclick="this.classList.toggle('active-convert')"><span>11 → <strong class="convert-letter glow-b">B</strong></span></div>
+                <div class="convert-pair" onclick="this.classList.toggle('active-convert')"><span>12 → <strong class="convert-letter glow-c">C</strong></span></div>
+                <div class="convert-pair" onclick="this.classList.toggle('active-convert')"><span>13 → <strong class="convert-letter glow-d">D</strong></span></div>
+                <div class="convert-pair" onclick="this.classList.toggle('active-convert')"><span>14 → <strong class="convert-letter glow-e">E</strong></span></div>
+                <div class="convert-pair" onclick="this.classList.toggle('active-convert')"><span>15 → <strong class="convert-letter glow-f">F</strong></span></div>
               </div>
             </div>
 
           </div>
         </section>
 
-        <!-- ================= SLIDE 18: INTERACTIVE DECIMAL TO HEX (255) ================= -->
-        <section class="slide" data-slide-num="18">
+        <!-- ================= SLIDE 17: CLASSROOM NOTEBOOK T-BAR DIVISION LADDER (HEX) ================= -->
+        <section class="slide" data-slide-num="17">
           <div class="slide-content">
             <div class="slide-header">
-              <h2>Interactive Visualizer: Decimal 255 → Hexadecimal</h2>
-              <p class="slide-sub">Animate division by 16 with glowing 15 → <strong>F</strong> conversion</p>
+              <h2>Universal Live Visualizer: Decimal → Hexadecimal Converter</h2>
+              <p class="slide-sub">Type ANY decimal number to dynamically generate the handwritten notebook division ladder!</p>
             </div>
 
-            <div class="solver-glass-card">
-              <div class="solver-toolbar">
-                <div class="toolbar-title">Solving (255)<sub>10</sub> → (?)<sub>16</sub></div>
-                <div class="toolbar-btns">
-                  <button id="s17-next-btn" class="btn btn-sm btn-primary" onclick="App.stepHex255()">Next Step</button>
-                  <button id="s17-auto-btn" class="btn btn-sm btn-accent" onclick="App.playHex255()">Auto Play</button>
-                  <button id="s17-reset-btn" class="btn btn-sm btn-secondary" onclick="App.resetHex255()">Reset</button>
+            <!-- ELEGANT 2-COLUMN SPLIT-PANEL CONVERTER WORKSPACE WITH T-BAR LADDER -->
+            <div class="converter-split-workspace">
+              
+              <!-- LEFT PANEL: INPUT CONTROLS & MOTION STAGE -->
+              <div class="glass-card panel-left-controls">
+                <div class="panel-header-badge">Control &amp; Input Hub</div>
+                <h3 class="panel-title" id="s17-toolbar-title">Solving (<span id="s17-target-num">255</span>)<sub>10</sub> → (?)<sub>16</sub></h3>
+
+                <!-- CUSTOM INPUT BOX -->
+                <div class="custom-input-card mt-2">
+                  <label for="hex-user-input" class="input-field-label">Enter Decimal Number:</label>
+                  <div class="input-with-btn">
+                    <input type="number" id="hex-user-input" value="255" min="1" max="99999" class="custom-num-input">
+                    <button class="btn btn-sm btn-primary" onclick="App.loadCustomNumber('hex')">Load &amp; Convert ⚡</button>
+                  </div>
                 </div>
+
+                <!-- QUICK PRESETS -->
+                <div class="preset-chips-group mt-2">
+                  <span class="preset-label">Quick Presets:</span>
+                  <button class="preset-btn" onclick="App.setPreset('hex', 255)">255</button>
+                  <button class="preset-btn" onclick="App.setPreset('hex', 175)">175</button>
+                  <button class="preset-btn" onclick="App.setPreset('hex', 4095)">4095</button>
+                  <button class="preset-btn" onclick="App.setPreset('hex', 65535)">65535</button>
+                </div>
+
+                <!-- CONTROLS -->
+                <div class="action-btn-row mt-2">
+                  <button id="s17-next-btn" class="btn btn-sm btn-primary" onclick="App.stepHex255()">Next Step →</button>
+                  <button id="s17-auto-btn" class="btn btn-sm btn-accent" onclick="App.playHex255()">Auto Play ▶</button>
+                  <button id="s17-reset-btn" class="btn btn-sm btn-secondary" onclick="App.resetHex255()">Reset ↺</button>
+                </div>
+
+                <!-- LIVE MATH MOTION STAGE -->
+                <div class="live-math-stage mt-2" id="s17-math-stage">
+                  <div class="math-eq-display">
+                    <span class="math-active-label">Active Step:</span>
+                    <span class="math-operand" id="s17-div-num">255</span> ÷ <span class="math-base">16</span> = 
+                    <span class="math-quotient" id="s17-div-quot">15</span> 
+                    <span class="math-remainder-pill" id="s17-div-rem">Remainder: F (15)</span>
+                  </div>
+                  <div class="quotient-carry-arrow" id="s17-carry-text">↓ Quotient 15 carries over as new dividend for next step ↓</div>
+                </div>
+
               </div>
 
-              <div class="solver-table-wrap">
-                <table class="solver-table">
-                  <thead>
-                    <tr>
-                      <th>Step</th>
-                      <th>Dividend</th>
-                      <th>Divisor</th>
-                      <th>Quotient</th>
-                      <th>Remainder (Hex)</th>
-                    </tr>
-                  </thead>
-                  <tbody id="s17-tbody"></tbody>
-                </table>
+              <!-- RIGHT PANEL: CLASSROOM NOTEBOOK T-BAR LADDER OUTPUT -->
+              <div class="glass-card panel-right-output">
+                <div class="panel-header-badge">Notebook T-Bar Division Ladder Method</div>
+                
+                <div class="notebook-tbar-container mt-2">
+                  <!-- T-BAR LADDER HEADER -->
+                  <div class="tbar-header-row">
+                    <div class="tbar-col-head col-divisor">Divisor</div>
+                    <div class="tbar-col-head col-quotient">Number / Quotient</div>
+                    <div class="tbar-col-head col-remainder">Remainder</div>
+                  </div>
+
+                  <!-- T-BAR LADDER BODY ROWS -->
+                  <div class="tbar-ladder-body" id="s17-tbody"></div>
+                </div>
+
+                <div class="result-highlight-card mt-2" id="s17-result-card">
+                  <div class="reverse-tag">Read Remainders Bottom (MSD) to Top (LSD) ↑</div>
+                  <div class="final-answer-text" id="s17-ans-text">Result: (255)₁₀ = ?</div>
+                </div>
+
               </div>
 
-              <div class="result-highlight-card" id="s17-result-card">
-                <div class="reverse-tag">Read Bottom-to-Top ↑</div>
-                <div class="final-answer-text" id="s17-ans-text">Result: (255)₁₀ = ?</div>
-              </div>
             </div>
+
           </div>
         </section>
 
-        <!-- ================= SLIDE 19: PRACTICE QUESTIONS ================= -->
-        <section class="slide" data-slide-num="19">
+        <!-- ================= SLIDE 18: PRACTICE QUESTIONS ================= -->
+        <section class="slide" data-slide-num="18">
           <div class="slide-content">
             <div class="slide-header">
               <h2>Classroom Practice Questions</h2>
@@ -962,8 +1043,8 @@
           </div>
         </section>
 
-        <!-- ================= SLIDE 20: 10-QUESTION INTERACTIVE QUIZ ENGINE ================= -->
-        <section class="slide" data-slide-num="20">
+        <!-- ================= SLIDE 19: 10-QUESTION INTERACTIVE QUIZ ENGINE ================= -->
+        <section class="slide" data-slide-num="19">
           <div class="slide-content">
             <div class="slide-header flex-header-between">
               <div>
@@ -996,70 +1077,102 @@
           </div>
         </section>
 
-        <!-- ================= SLIDE 21: PROPER ENHANCED SUMMARY & REVISION CHEATSHEET ================= -->
-        <section class="slide" data-slide-num="21">
+        <!-- ================= SLIDE 20: MASTER ANIMATED MIND MAP SUMMARY ================= -->
+        <section class="slide" data-slide-num="20">
           <div class="slide-content text-center">
             <div class="slide-header">
-              <h2>Master Lecture Summary &amp; Revision Cheatsheet</h2>
-              <p class="slide-sub">Quick-reference rules for Number Systems, Memory Units, and Conversion Algorithms</p>
+              <h2>Master Lecture Mind Map &amp; Revision Hub</h2>
+              <p class="slide-sub">Interactive 360° Architecture Diagram of Number Systems &amp; Conversion Rules</p>
             </div>
 
-            <div class="grid-4 mb-3">
+            <!-- ANIMATED MIND MAP WORKSPACE CONTAINER -->
+            <div class="mindmap-wrapper">
               
-              <!-- 01. RADIX SYSTEM SUMMARY -->
-              <div class="glass-card text-center summary-card reveal-step glow-hover">
-                <div class="summary-icon">🔢</div>
-                <h3>Base Radix (R)</h3>
-                <ul class="summary-pill-list mt-2">
-                  <li><span class="sum-pill dec-pill">Base 10</span> Digits {0..9}</li>
-                  <li><span class="sum-pill bin-pill">Base 2</span> Digits {0, 1}</li>
-                  <li><span class="sum-pill oct-pill">Base 8</span> Digits {0..7}</li>
-                  <li><span class="sum-pill hex-pill">Base 16</span> Digits {0..F}</li>
-                </ul>
+              <!-- SVG CONNECTING CURVED LASER BRANCH LINES -->
+              <svg class="mindmap-svg-canvas" viewBox="0 0 1200 500" preserveAspectRatio="none">
+                <defs>
+                  <linearGradient id="grad1" x1="0%" y1="0%" x2="100%" y2="100%">
+                    <stop offset="0%" stop-color="#002060" />
+                    <stop offset="100%" stop-color="#38bdf8" />
+                  </linearGradient>
+                </defs>
+                <!-- Central Node to 4 Radial Nodes Curved Paths -->
+                <path d="M 600,250 Q 420,120 280,120" class="mindmap-line line-pulse-1" />
+                <path d="M 600,250 Q 780,120 920,120" class="mindmap-line line-pulse-2" />
+                <path d="M 600,250 Q 420,380 280,380" class="mindmap-line line-pulse-3" />
+                <path d="M 600,250 Q 780,380 920,380" class="mindmap-line line-pulse-4" />
+              </svg>
+
+              <!-- CENTRAL CORE NODE (PULSING 3D GLOWING CORE) -->
+              <div class="mindmap-center-node pulse-glow-core">
+                <div class="core-inner-ring"></div>
+                <div class="core-icon">💡</div>
+                <div class="core-title">NUMBER SYSTEMS</div>
+                <div class="core-subtitle">&amp; CONVERSIONS</div>
               </div>
 
-              <!-- 02. MEMORY UNITS HIERARCHY -->
-              <div class="glass-card text-center summary-card reveal-step glow-hover">
-                <div class="summary-icon">💾</div>
-                <h3>Memory Units</h3>
-                <div class="summary-chain mt-2">
-                  <div class="chain-step"><strong>1 Bit</strong> = 0 / 1</div>
-                  <div class="chain-arrow">↓</div>
-                  <div class="chain-step"><strong>1 Nibble</strong> = 4 Bits</div>
-                  <div class="chain-arrow">↓</div>
-                  <div class="chain-step"><strong>1 Byte</strong> = 8 Bits</div>
-                  <div class="chain-arrow">↓</div>
-                  <div class="chain-step"><strong>1 Word</strong> = 16/32/64b</div>
+              <!-- 4 RADIAL BRANCH NODES -->
+              
+              <!-- BRANCH 1 (TOP LEFT): 4 BASE RADIX SYSTEMS -->
+              <div class="mindmap-branch-card branch-top-left reveal-step glow-hover">
+                <div class="branch-header">
+                  <span class="branch-badge">01. SYSTEMS</span>
+                  <h4>Base Radix (R)</h4>
+                </div>
+                <div class="branch-grid-pills">
+                  <div class="mm-pill dec"><strong class="mm-tag">DEC (R=10)</strong> <span>Digits 0..9</span></div>
+                  <div class="mm-pill bin"><strong class="mm-tag">BIN (R=2)</strong> <span>Digits 0, 1</span></div>
+                  <div class="mm-pill oct"><strong class="mm-tag">OCT (R=8)</strong> <span>Digits 0..7</span></div>
+                  <div class="mm-pill hex"><strong class="mm-tag">HEX (R=16)</strong> <span>Digits 0..9, A..F</span></div>
                 </div>
               </div>
 
-              <!-- 03. MSB VS LSB ARCHITECTURE -->
-              <div class="glass-card text-center summary-card reveal-step glow-hover">
-                <div class="summary-icon">⚙️</div>
-                <h3>MSB vs. LSB</h3>
-                <div class="summary-bit-rules mt-2">
-                  <div class="sum-msb-box">
+              <!-- BRANCH 2 (TOP RIGHT): MEMORY UNITS HIERARCHY -->
+              <div class="mindmap-branch-card branch-top-right reveal-step glow-hover">
+                <div class="branch-header">
+                  <span class="branch-badge">02. MEMORY</span>
+                  <h4>Data Units Hierarchy</h4>
+                </div>
+                <div class="branch-flow-chain">
+                  <div class="chain-chip"><strong>1 Bit</strong> <span>0 / 1</span></div>
+                  <span class="chain-arrow">➔</span>
+                  <div class="chain-chip"><strong>1 Nibble</strong> <span>4 Bits</span></div>
+                  <span class="chain-arrow">➔</span>
+                  <div class="chain-chip"><strong>1 Byte</strong> <span>8 Bits</span></div>
+                  <span class="chain-arrow">➔</span>
+                  <div class="chain-chip"><strong>1 Word</strong> <span>64-Bit</span></div>
+                </div>
+              </div>
+
+              <!-- BRANCH 3 (BOTTOM LEFT): MSB VS LSB ARCHITECTURE -->
+              <div class="mindmap-branch-card branch-bottom-left reveal-step glow-hover">
+                <div class="branch-header">
+                  <span class="branch-badge">03. BITS</span>
+                  <h4>MSB vs. LSB Rules</h4>
+                </div>
+                <div class="branch-bit-duo">
+                  <div class="mm-bit-box msb">
                     <span class="badge-red">MSB</span>
-                    <p>Leftmost Bit<br>(Highest Weight 2<sup>7</sup>)</p>
+                    <p>Leftmost Bit • Highest Weight (2<sup>n-1</sup>)<br>Final Quotient &lt; Base</p>
                   </div>
-                  <div class="sum-lsb-box mt-2">
+                  <div class="mm-bit-box lsb">
                     <span class="badge-green">LSB</span>
-                    <p>Rightmost Bit<br>(Lowest Weight 2<sup>0</sup>)</p>
+                    <p>Rightmost Bit • Lowest Weight (2<sup>0</sup>)<br>First Remainder Obtained</p>
                   </div>
                 </div>
               </div>
 
-              <!-- 04. GOLDEN DIVISION RULE -->
-              <div class="glass-card text-center summary-card reveal-step glow-hover">
-                <div class="summary-icon">🔄</div>
-                <h3>Golden Division Rule</h3>
-                <div class="golden-rule-box mt-2">
-                  <ol class="golden-list">
-                    <li>Divide Decimal Number by Target Base (2, 8, 16).</li>
-                    <li>Record Remainders.</li>
-                    <li>Read Remainders: <strong>Bottom (MSB) to Top (LSB) ↑</strong></li>
-                  </ol>
+              <!-- BRANCH 4 (BOTTOM RIGHT): GOLDEN DIVISION ALGORITHM RULE -->
+              <div class="mindmap-branch-card branch-bottom-right reveal-step glow-hover">
+                <div class="branch-header">
+                  <span class="branch-badge">04. ALGORITHM</span>
+                  <h4>Golden Division Rule</h4>
                 </div>
+                <ol class="golden-mindmap-steps">
+                  <li><strong>Divide:</strong> Decimal number by Target Base (2, 8, 16).</li>
+                  <li><strong>Stop Condition:</strong> When Quotient &lt; Base.</li>
+                  <li><strong>Read Direction:</strong> Start at <strong>MSB (Bottom Quotient) down to LSB (Top) ↑</strong>.</li>
+                </ol>
               </div>
 
             </div>
@@ -1068,7 +1181,7 @@
               <button class="btn btn-primary btn-ripple" onclick="App.jump(1)">
                 <span>Restart Presentation ↺</span>
               </button>
-              <button class="btn btn-accent btn-ripple" onclick="App.jump(20)">
+              <button class="btn btn-accent btn-ripple" onclick="App.jump(19)">
                 <span>Take 10-Question Quiz 📝</span>
               </button>
             </div>
